@@ -13,6 +13,7 @@ const createUser= async (payload:Partial<Iuser>)=>
         )
 
         return user;
+        
 }
 
 export const userServices={
