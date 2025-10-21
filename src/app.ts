@@ -1,9 +1,12 @@
 import {Server} from 'http';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { userRoutes } from './app/Modules/User/User.route';
 import cors from "cors"
 import { router } from './app/routes';
+import { error } from 'console';
+import { envVars } from './app/Config/env';
+import { globalError } from './app/middlewares/GlobalErrorHandler';
 
 const app= express();
 app.use(express.json())
@@ -23,6 +26,8 @@ app.get('/',(req:Request,res:Response)=>
         message: "welcome To Tour management"
     })
 })
+
+app.use(globalError)
 
 export default app;
 
