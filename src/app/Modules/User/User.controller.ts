@@ -14,14 +14,16 @@ const createUser= async(req:Request,res:Response)=>
             message: "User successfully created"
         })
         
-    } catch (error : any) {
+    } catch (error) {
         console.log(error)
-        res.status(httpStatus.BAD_REQUEST).json({
-            message: `"Route not found ${error.message}`
-        })
+        next(error)
     }
 }
 
 export const  userControllers={
     createUser
+}
+
+function next(error: unknown) {
+    throw new Error("Function not implemented.");
 }
