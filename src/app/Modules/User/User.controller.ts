@@ -4,6 +4,7 @@ import httpStatus from "http-status-codes"
 import { promise, success } from 'zod';
 import { catchAsynch } from "../../Utils/CatchAsync";
 import { userServices } from "./User.service";
+import { sendResponse } from "../../Utils/sendResponse";
 
 
 
@@ -13,18 +14,31 @@ import { userServices } from "./User.service";
     const user = await userServices.createUser(req.body)
       
 
-        res.status(httpStatus.CREATED).json({
-            message: "User successfully created"
+        // res.status(httpStatus.CREATED).json({
+        //     message: "User successfully created"
+        // })
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.CREATED,
+            message:"User Create successfully",
+            data:user,
         })
 })
 
 const getAllUsers=catchAsynch(async (req:Request,res:Response,next:NextFunction)=>{
-         const users= await userServices.getAllUsers()
-         res.status(httpStatus.OK).json({
+         const result= await userServices.getAllUsers()
+        //  res.status(httpStatus.OK).json({
+        //     success:true,
+        //     message: "Get All Users",
+        //     data: users
+        //  })
+           sendResponse(res,{
             success:true,
-            message: "Get All Users",
-            data: users
-         })
+            statusCode:httpStatus.CREATED,
+            message:"Successfully Get all users",
+            data:result.data,
+            meta:result.meta
+        })
 })
 
 
