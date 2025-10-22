@@ -7,6 +7,8 @@ import { router } from './app/routes';
 import { error } from 'console';
 import { envVars } from './app/Config/env';
 import { globalError } from './app/middlewares/GlobalErrorHandler';
+import httpStatus from "http-status-codes"
+import notFound from './app/middlewares/NotFound';
 
 const app= express();
 app.use(express.json())
@@ -28,6 +30,8 @@ app.get('/',(req:Request,res:Response)=>
 })
 
 app.use(globalError)
+
+app.use(notFound)
 
 export default app;
 
