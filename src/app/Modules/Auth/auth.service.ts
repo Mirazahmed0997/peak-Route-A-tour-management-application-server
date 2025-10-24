@@ -3,6 +3,7 @@ import { Iuser } from "../User/User.interface"
 import  httpStatus  from 'http-status-codes';
 import { User } from "../User/User.model";
 import bcryptjs from "bcryptjs"
+import jwt from "jsonwebtoken"
 
 
 
@@ -17,8 +18,8 @@ const credentialsLogin=async(payload:Partial<Iuser>)=>{
             } 
 
 
-            console.log(isUserExist.password)
-            console.log(password)
+            // console.log(isUserExist.password)
+            // console.log(password)
 
         const isPassordMatched=await bcryptjs.compare(password as string,isUserExist.password as string)
         console.log(isPassordMatched)
@@ -28,10 +29,20 @@ const credentialsLogin=async(payload:Partial<Iuser>)=>{
             throw new AppError(httpStatus.BAD_REQUEST,"Password Incorrect")
         }
 
-       
+        const jwtPayload={
+        userId:isUserExist._id,
+        email: isUserExist.email,
+        role: isUserExist.role
+       }
+
+    //    console.log(jwtPayload)
+
+       const accesToken=jwt.sign(jwtPayload,"secret",{
+        expiresIn:"1d"
+       })
 
         return{
-            email: isUserExist.email
+            accesToken
         }
 
         

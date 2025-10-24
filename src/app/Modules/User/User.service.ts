@@ -31,9 +31,10 @@ const createUser= async (payload:Partial<Iuser>)=>
                 password:hashedPassword,
                 ...rest
             }
+
         )
 
-        return {};
+        return user;
 
 }
 
