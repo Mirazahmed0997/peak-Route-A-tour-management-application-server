@@ -6,12 +6,17 @@ dotenv.config()
 interface EnvConfig{
       PORT: string,
       DB_URL:string ,
-      NODE_ENV: string
+      NODE_ENV: string,
+      BCRYPT_SALT_ROUND:string,
+      jwt_access_expire:string,
+      jwt_access_secret:string,
+      SUPER_ADMIN_EMAIL:string,
+      SUPER_ADMIN_PASSWORD:string
 }
 
 const loadEnvVariables=():EnvConfig=>
 {
-    const requiredEnvVariables: string[]=["PORT","DB_URL","NODE_ENV"]
+    const requiredEnvVariables: string[]=["PORT","DB_URL","NODE_ENV","BCRYPT_SALT_ROUND","jwt_access_expire","jwt_access_secret","SUPER_ADMIN_EMAIL","SUPER_ADMIN_PASSWORD"]
 
     requiredEnvVariables.forEach(key=>
     {
@@ -25,7 +30,12 @@ const loadEnvVariables=():EnvConfig=>
     return {
     PORT: process.env.PORT as string,
     DB_URL: process.env.DB_URL!,
-    NODE_ENV: process.env.NODE_ENV as string
+    NODE_ENV: process.env.NODE_ENV as string,
+    BCRYPT_SALT_ROUND:process.env.BCRYPT_SALT_ROUND as string,
+    jwt_access_expire: process.env.jwt_access_expire as string,
+    jwt_access_secret:process.env.jwt_access_secret as string,
+    SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
+    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string
 }
 }
 
