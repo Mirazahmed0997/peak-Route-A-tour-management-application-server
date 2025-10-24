@@ -3,6 +3,7 @@ import { IauthProvider, Iuser } from "./User.interface";
 import { User } from "./User.model";
 import httpStatus  from 'http-status-codes';
 import bcryptjs from "bcryptjs"
+import { envVars } from "../../Config/env";
 
 
 const createUser= async (payload:Partial<Iuser>)=>
@@ -14,7 +15,7 @@ const createUser= async (payload:Partial<Iuser>)=>
             throw new AppError(httpStatus.BAD_REQUEST,"USER  ALREADY EXIST")
         }  
 
-        const hashedPassword=await bcryptjs.hash(password as string,10)
+        const hashedPassword=await bcryptjs.hash(password as string,Number(envVars.BCRYPT_SALT_ROUND))
         console.log(hashedPassword)
 
         const isPasswordMatch= await bcryptjs.compare(password!,hashedPassword)

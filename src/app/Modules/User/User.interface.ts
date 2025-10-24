@@ -27,7 +27,7 @@ export interface Iuser{
     address?: string;
     isDeleted?:string;
     isActive?:isActive;
-    isVerified?:string
+    isVerified?:boolean
     role: Role;
    
     auths:  IauthProvider[];

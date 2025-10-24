@@ -5,6 +5,7 @@ import app from './app';
 import { promise } from 'zod';
 import { error } from 'console';
 import { envVars } from './app/Config/env';
+import { seedSuperAdmin } from './app/Utils/seedSuperAdmin';
 
 
 
@@ -29,7 +30,10 @@ const startServer= async()=>
  }
 }
 
-startServer();
+(async()=>{
+   await startServer();
+   await seedSuperAdmin()
+})()
 
 // unhandled rejection error
 
