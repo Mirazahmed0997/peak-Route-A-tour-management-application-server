@@ -31,8 +31,9 @@ import { JwtPayload } from "jsonwebtoken";
  const updateUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
     const userId= req.params.id
-    const token= req.headers.authorization
-    const verifiedToken = verifyToken(token as string,envVars.jwt_access_secret) as JwtPayload
+    // const token= req.headers.authorization
+    // const verifiedToken = verifyToken(token as string,envVars.jwt_access_secret) as JwtPayload
+    const verifiedToken=req.user
     const payload= req.body
     const user = await userServices.updateUser(userId as string,payload,verifiedToken)
       
