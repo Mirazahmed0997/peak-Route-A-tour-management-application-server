@@ -14,4 +14,5 @@ export const generateToken=(payload : JwtPayload,secret:string,expiresIn:string)
 export const verifyToken=(token:string,secret:string) =>
 {
     const verifyToken=jwt.verify(token,secret)
+    return verifyToken
 }

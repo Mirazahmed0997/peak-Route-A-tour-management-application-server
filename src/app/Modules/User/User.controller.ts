@@ -5,6 +5,9 @@ import { promise, success } from 'zod';
 import { catchAsynch } from "../../Utils/CatchAsync";
 import { userServices } from "./User.service";
 import { sendResponse } from "../../Utils/sendResponse";
+import { verifyToken } from "../../Utils/jwt";
+import { envVars } from "../../Config/env";
+import { JwtPayload } from "jsonwebtoken";
 
 
 
@@ -21,6 +24,26 @@ import { sendResponse } from "../../Utils/sendResponse";
             success:true,
             statusCode:httpStatus.CREATED,
             message:"User Create successfully",
+            data:user,
+        })
+})
+
+ const updateUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
+{
+    const userId= req.params.id
+    const token= req.headers.authorization
+    const verifiedToken = verifyToken(token as string,envVars.jwt_access_secret) as JwtPayload
+    const payload= req.body
+    const user = await userServices.updateUser(userId as string,payload,verifiedToken)
+      
+
+        // res.status(httpStatus.CREATED).json({
+        //     message: "User successfully created"
+        // })
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.CREATED,
+            message:"User updated successfully",
             data:user,
         })
 })
@@ -48,7 +71,8 @@ function next(_error: unknown) {
 
 export const userControllers={
     createUser,
-    getAllUsers
+    getAllUsers,
+    updateUser
 }
 
 
