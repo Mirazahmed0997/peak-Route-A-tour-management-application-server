@@ -4,12 +4,22 @@ import { sendResponse } from "../../Utils/sendResponse"
 import  httpStatus  from 'http-status-codes';
 import { User } from "../User/User.model";
 import { authServices } from "./auth.service";
+import AppError from "../../errorHelper/AppError";
 
 
 const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
 
     const logInInfo= await authServices.credentialsLogin(req.body)
+
+    res.cookie("accessToken",logInInfo.accesToken,{
+        httpOnly:true,
+        secure:false
+    })
+    res.cookie("refreshToken",logInInfo.refreshToken,{
+        httpOnly:true,
+        secure:false
+    })
       
 
         // res.status(httpStatus.CREATED).json({
@@ -25,6 +35,12 @@ const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFun
 const getNewAccessToken=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
     const refreshToken=req.cookies.refreshToken
+
+    if(!refreshToken)
+    {
+        throw new AppError(httpStatus.BAD_REQUEST,"No refresh Token")
+    }
+
     const tokenInfo= await authServices.getNewAccessToken(refreshToken)
       
 
