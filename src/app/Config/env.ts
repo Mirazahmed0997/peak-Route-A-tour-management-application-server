@@ -11,12 +11,14 @@ interface EnvConfig{
       jwt_access_expire:string,
       jwt_access_secret:string,
       SUPER_ADMIN_EMAIL:string,
-      SUPER_ADMIN_PASSWORD:string
+      SUPER_ADMIN_PASSWORD:string,
+      JWT_EXPIRE_SECRET:string,
+      JWT_REFRESH_SECRET:string
 }
 
 const loadEnvVariables=():EnvConfig=>
 {
-    const requiredEnvVariables: string[]=["PORT","DB_URL","NODE_ENV","BCRYPT_SALT_ROUND","jwt_access_expire","jwt_access_secret","SUPER_ADMIN_EMAIL","SUPER_ADMIN_PASSWORD"]
+    const requiredEnvVariables: string[]=["PORT","DB_URL","NODE_ENV","BCRYPT_SALT_ROUND","jwt_access_expire","jwt_access_secret","SUPER_ADMIN_EMAIL","SUPER_ADMIN_PASSWORD","JWT_EXPIRE_SECRET","JWT_REFRESH_SECRET"]
 
     requiredEnvVariables.forEach(key=>
     {
@@ -35,7 +37,9 @@ const loadEnvVariables=():EnvConfig=>
     jwt_access_expire: process.env.jwt_access_expire as string,
     jwt_access_secret:process.env.jwt_access_secret as string,
     SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
-    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string
+    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
+    JWT_EXPIRE_SECRET: process.env.JWT_EXPIRE_SECRET as string,
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string
 }
 }
 

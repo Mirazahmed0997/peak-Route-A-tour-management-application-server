@@ -28,6 +28,8 @@ export const verifyAuth=(...authRoles:string[])=> async (req:Request,res:Respons
          throw new AppError(403,"Permission Denied")
     }
 
+    req.user= verifyToken
+
     console.log(verifyToken)
 
     next()
