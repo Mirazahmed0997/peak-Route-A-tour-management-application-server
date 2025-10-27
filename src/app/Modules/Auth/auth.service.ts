@@ -21,10 +21,6 @@ const credentialsLogin=async(payload:Partial<Iuser>)=>{
                 throw new AppError(httpStatus.BAD_REQUEST,"USER  DOES NOT EXIST")
             } 
 
-
-            // console.log(isUserExist.password)
-            // console.log(password)
-
         const isPassordMatched=await bcryptjs.compare(password as string,isUserExist.password as string)
         console.log(isPassordMatched)
 
@@ -35,6 +31,7 @@ const credentialsLogin=async(payload:Partial<Iuser>)=>{
 
 
     const userTokens= createUserTokrens(isUserExist)
+    console.log(userTokens)
 
     const {password:pass,...rest}=isUserExist.toObject()
 

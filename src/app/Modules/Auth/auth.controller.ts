@@ -6,6 +6,7 @@ import { User } from "../User/User.model";
 import AppError from "../../errorHelper/AppError";
 import { authServices } from "./auth.service";
 import { setAuthCookies } from "../../Utils/setCookie";
+import { JwtPayload } from "jsonwebtoken";
 
 
 const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
@@ -13,12 +14,9 @@ const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFun
 
     const logInInfo= await authServices.credentialsLogin(req.body)
 
-   setAuthCookies(res,logInInfo)
-   
-      
-
-        
-        sendResponse(res,{
+    setAuthCookies(res,logInInfo)
+          
+       sendResponse(res,{
             success:true,
             statusCode:httpStatus.OK,
             message:"User Login successfully",
@@ -36,7 +34,13 @@ const getNewAccessToken=catchAsynch( async (req:Request,res:Response,next:NextFu
         throw new AppError(httpStatus.BAD_REQUEST,"No refresh Token")
     }
 
-    const tokenInfo= await authServices.getNewAccessToken(refreshToken)
+    const tokenInfo= await authServices.getNewAccessToken(refreshToken as string)  
+
+    console.log(tokenInfo)
+
+    // to set new acces token in cookies
+
+    // setAuthCookies(res,tokenInfo) 
     
     
     res.cookie("accessToken",tokenInfo.accessToken,{
@@ -45,18 +49,43 @@ const getNewAccessToken=catchAsynch( async (req:Request,res:Response,next:NextFu
     })
       
 
-        // res.status(httpStatus.CREATED).json({
-        //     message: "User successfully created"
-        // })
+       
         sendResponse(res,{
             success:true,
             statusCode:httpStatus.OK,
-            message:"User Login successfully",
+            message:"Successfully get new access token",
             data:tokenInfo,
+        })
+})
+
+
+const logOut=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
+{
+
+    res.clearCookie("accessToken",{
+        httpOnly:true,
+        secure:false,
+        sameSite:'lax'
+    })
+
+    res.clearCookie("refreshToken",{
+        httpOnly:true,
+        secure:false,
+        sameSite:'lax'
+    })
+      
+
+       
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.OK,
+            message:"User Logged out successfully",
+            data:null,
         })
 })
 
 export  const  authControllers={
     credentialsLogin,
-    getNewAccessToken
+    getNewAccessToken,
+    logOut
 }
