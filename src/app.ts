@@ -9,8 +9,10 @@ import { envVars } from './app/Config/env';
 import { globalError } from './app/middlewares/GlobalErrorHandler';
 import httpStatus from "http-status-codes"
 import notFound from './app/middlewares/NotFound';
+import cookieParser from "cookie-parser"
 
 const app= express();
+app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
 
