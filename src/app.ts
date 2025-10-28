@@ -10,11 +10,21 @@ import { globalError } from './app/middlewares/GlobalErrorHandler';
 import httpStatus from "http-status-codes"
 import notFound from './app/middlewares/NotFound';
 import cookieParser from "cookie-parser"
+import passport from 'passport';
+import expressSession  from 'express-session';
+import './app/Config/passport'
 
 const app= express();
 app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
+app.use(expressSession({
+    secret:"Your secret",
+    resave:false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 
