@@ -19,7 +19,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(cors())
 app.use(expressSession({
-    secret:"Your secret",
+    secret:envVars.EXPRESS_SESSION_SECRET,
     resave:false,
     saveUninitialized: false
 }))
