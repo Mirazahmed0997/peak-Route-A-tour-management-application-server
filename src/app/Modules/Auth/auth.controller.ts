@@ -112,9 +112,14 @@ const resetPassword=catchAsynch( async (req:Request,res:Response,next:NextFuncti
 const googleCallBackControllers=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
 
- 
-        const user=  req.user
+        let redirectTo= req.query.state? req.query.state as string : " " 
 
+        if(redirectTo.startsWith('/'))
+        {
+            redirectTo= redirectTo.slice(1)
+        }
+
+        const user=  req.user
         console.log("from google callback",user)
 
         if(!user){
@@ -131,7 +136,7 @@ const googleCallBackControllers=catchAsynch( async (req:Request,res:Response,nex
         // })
 
 
-        res.redirect(envVars.FRONTEND_URL)
+        res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
 })
 
 
