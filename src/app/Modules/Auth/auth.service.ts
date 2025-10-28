@@ -11,35 +11,35 @@ import { email, string } from 'zod';
 
 
 
-const credentialsLogin=async(payload:Partial<Iuser>)=>{
-    const {email,password}=payload
+// const credentialsLogin=async(payload:Partial<Iuser>)=>{
+//     const {email,password}=payload
 
 
-    const isUserExist= await User.findOne({email})
-        if(!isUserExist)
-            {
-                throw new AppError(httpStatus.BAD_REQUEST,"USER  DOES NOT EXIST")
-            } 
+//     const isUserExist= await User.findOne({email})
+//         if(!isUserExist)
+//             {
+//                 throw new AppError(httpStatus.BAD_REQUEST,"USER  DOES NOT EXIST")
+//             } 
 
-        const isPassordMatched=await bcryptjs.compare(password as string,isUserExist.password as string)
+//         const isPassordMatched=await bcryptjs.compare(password as string,isUserExist.password as string)
 
-        if(!isPassordMatched)
-        {
-            throw new AppError(httpStatus.BAD_REQUEST,"Password Incorrect")
-        }
+//         if(!isPassordMatched)
+//         {
+//             throw new AppError(httpStatus.BAD_REQUEST,"Password Incorrect")
+//         }
 
-    const userTokens= createUserTokrens(isUserExist)
+//     const userTokens= createUserTokrens(isUserExist)
 
-    const {password:pass,...rest}=isUserExist.toObject()
+//     const {password:pass,...rest}=isUserExist.toObject()
 
-        return{
-            accessToken: userTokens.accesToken,
-            refreshToken: userTokens.refreshToken,
-            user:rest
-        }
+//         return{
+//             accessToken: userTokens.accesToken,
+//             refreshToken: userTokens.refreshToken,
+//             user:rest
+//         }
 
         
-}
+// }
 const getNewAccessToken=async(refreshToken:string)=>{
 
    
@@ -73,7 +73,6 @@ const resetPassword=async(oldPassword: string, newPassword: string, decodedToken
 }
 
 export  const  authServices={
-    credentialsLogin,
     getNewAccessToken,
     resetPassword
 }
