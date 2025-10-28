@@ -10,6 +10,37 @@ export const globalError=(err:any,req:Request,res:Response,next:NextFunction)=>
     let statusCode=500
     let message =`Something went wrong`
 
+
+    // duplicate error handle
+    if(err.code===11000)
+    {
+       
+        statusCode=400
+        const matchedArrey = err.message.match(/"([^"]*)"/)
+        console.log("Duplicate Error", err.message)
+        message=`${matchedArrey[1]} already Exist`
+    }
+    // cast/object ID error
+    else if(err.name==="CastError")
+    {
+        statusCode=400,
+        message="Invalid mongoose objectID"
+    }
+
+    // validation error
+    else if(err.name ==="ValidationError"){
+
+        
+        statusCode=400;
+        const errorSources=[]
+        const errors= Object.values(err.errors)
+        errors.forEach((errorObject : any)=> errorSources.push(errorObject.path))
+
+        message= " Validation Error Occured"
+       
+       
+    }
+
     if(err instanceof AppError)
     {
         statusCode=err.statusCode,
