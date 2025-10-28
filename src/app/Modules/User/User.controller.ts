@@ -35,7 +35,7 @@ import { JwtPayload } from "jsonwebtoken";
     // const verifiedToken = verifyToken(token as string,envVars.jwt_access_secret) as JwtPayload
     const verifiedToken=req.user
     const payload= req.body
-    const user = await userServices.updateUser(userId as string,payload,verifiedToken)
+    const user = await userServices.updateUser(userId as string,payload,verifiedToken as JwtPayload)
       
 
         // res.status(httpStatus.CREATED).json({
