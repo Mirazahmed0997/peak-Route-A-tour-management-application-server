@@ -9,6 +9,12 @@ export const globalError=(err:any,req:Request,res:Response,next:NextFunction)=>
 {
     let statusCode=500
     let message =`Something went wrong`
+    const errorSources : any=[
+        //     {
+        //     "path":"isDeleted",
+        //     "message":""
+        // }
+                                 ]
 
 
     // duplicate error handle
@@ -32,11 +38,17 @@ export const globalError=(err:any,req:Request,res:Response,next:NextFunction)=>
 
         
         statusCode=400;
-        const errorSources=[]
+     
         const errors= Object.values(err.errors)
-        errors.forEach((errorObject : any)=> errorSources.push(errorObject.path))
+        errors.forEach((errorObject : any)=> errorSources.push({
+            path:errorObject.path,
+            message:errorObject.message
+        }))
+        console.log(errorSources)
+        message= err.message
 
-        message= " Validation Error Occured"
+
+        // need to start from here
        
        
     }
@@ -54,6 +66,7 @@ export const globalError=(err:any,req:Request,res:Response,next:NextFunction)=>
     res.status(statusCode).json({
         success: false,
         message,
+        errorSources,
         err,
         stack: envVars.NODE_ENV ==="Development" ? err.stack:null
     })
