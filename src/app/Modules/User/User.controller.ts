@@ -66,6 +66,29 @@ const getAllUsers=catchAsynch(async (req:Request,res:Response,next:NextFunction)
 })
 
 
+
+export const deleteUser = catchAsynch(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { id } = req.params; // ✅ get user ID from URL
+      const verifyToken = req.user; // ✅ assuming JWT middleware sets req.user
+  
+      // ✅ call service with parameters
+      const result = await userServices.deleteUser(id as string, verifyToken as JwtPayload);
+  
+      // ✅ send success response
+      sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK, // use 200 for successful delete
+        message: "User deleted successfully",
+        data: result,
+      });
+    }
+  );
+
+
+
+
+
 function next(_error: unknown) {
     throw new Error("Function not implemented.");
 }
@@ -73,7 +96,8 @@ function next(_error: unknown) {
 export const userControllers={
     createUser,
     getAllUsers,
-    updateUser
+    updateUser,
+    deleteUser
 }
 
 
