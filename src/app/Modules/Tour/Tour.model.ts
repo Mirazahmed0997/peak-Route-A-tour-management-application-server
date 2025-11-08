@@ -4,17 +4,16 @@ import { required } from 'zod/mini';
 import { timeStamp } from "console";
 
 
-const tourTypeSchema = new Schema<ITourType>({
-
-    name: {type:String, required: true, unique: true}
 
 
-},{
+const TourTypeSchema = new Schema<ITourType>({
+    name: {type: String,required: true, unique:true}
+},
+{
     timestamps: true
 })
 
-export const TourType = model<ITourType>("TourType", tourTypeSchema)
-
+const TourType = model<ITourType>("TourType", TourTypeSchema)
 
 const tourSchema = new Schema<ITour>({
     title:{type:String, required:true},
@@ -41,6 +40,8 @@ const tourSchema = new Schema<ITour>({
         ref:"TourType",
         required: true
     }
+
+
 },{
     timestamps: true
 })
