@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
 
 
+
 export interface ITourType{
-    name: string;
+    name : string;
     
 }
 
@@ -12,6 +13,7 @@ export interface ITour{
     slug: string;
     decription?: string;
     images?:string[];
+    location?:string;
     description?:string;
     location:string;
     costFrom?:number;
