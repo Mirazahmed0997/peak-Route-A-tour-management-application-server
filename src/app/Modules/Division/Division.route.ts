@@ -12,7 +12,9 @@ const router =Router()
 router.post('/create',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
 // validateRequest(createDivisionZodSchema),
  divisionControllers.createDivision)
-router.patch('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),validateRequest(updateDivisionZodSchema),divisionControllers.updateDivision)
+router.patch('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
+// validateRequest(updateDivisionZodSchema),
+divisionControllers.updateDivision)
 router.delete('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),divisionControllers.deleteDivision)
 router.get('/',divisionControllers.getDivision)
 
