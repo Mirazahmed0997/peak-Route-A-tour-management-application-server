@@ -8,8 +8,8 @@ export const validateRequest=(zodSchema:ZodObject)=>  async (req:Request,res:Res
 
        try {
          req.body= await zodSchema.parseAsync(req.body)
-        console.log(req.body)
-        next()
+         console.log(req.body)
+         next()
        } catch (error) {
             next(error)
        }

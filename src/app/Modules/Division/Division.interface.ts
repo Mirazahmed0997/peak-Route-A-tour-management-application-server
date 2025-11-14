@@ -2,7 +2,7 @@
 
 export interface Idivision {
     name: string;
-    slug: string;
+    slug?: string;
     thumnail?:string;
     description?:string
 }
