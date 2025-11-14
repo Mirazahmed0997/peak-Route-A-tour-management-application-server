@@ -5,7 +5,7 @@ import { Idivision } from "./Division.interface";
 const divisionSchema = new Schema<Idivision>({
 
     name: {type:String, required: true, unique:true},
-    slug: {type: String, required:true, unique:true},
+    slug: {type: String, required:false, unique:true},
     thumnail: {type: String},
     description: {type: String}
 
