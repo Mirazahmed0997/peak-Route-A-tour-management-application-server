@@ -6,8 +6,6 @@ export interface ITourType{
     name : string;
     
 }
-
-
 export interface ITour{
     title: string;
     slug?: string;

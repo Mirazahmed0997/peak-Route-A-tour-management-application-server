@@ -1,4 +1,5 @@
 import AppError from "../../errorHelper/AppError"
+import { excludFields } from "../../globalConstants";
 import { searchFields } from "./Tour.constant";
 import { ITour, ITourType } from "./Tour.interface"
 import { Tour, TourType } from "./Tour.model"
@@ -110,11 +111,22 @@ const getAllTour = async (query: Record<string, string>) => {
     const filter = query
     const searchTerm = query.searchTerm || "";
     const sort = query.sort || "-createdAt"
+    const fields=query.fields?.split(",").join(" ") || ""
     delete filter["searchTerm"]
+    delete  filter["sort"]
+
+    console.log(fields)
+
+
+    for(const field of excludFields){
+        delete filter[field]
+    }
+
+
     const searchQuery={
        $or: searchFields.map(field=>({[field]: { $regex: searchTerm, $options: "i" } }))
     } 
-    const tours = await Tour.find(searchQuery).find(filter).sort(sort)
+    const tours = await Tour.find(searchQuery).find(filter).sort(sort).select(fields)
     console.log(searchTerm)
     const totalTour = await Tour.countDocuments()
     return {
