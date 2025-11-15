@@ -103,7 +103,8 @@ const createTourType= catchAsynch( async (req:Request,res:Response,next:NextFunc
     
         const getAllTour= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
             {
-                const tours = await TourService.getAllTour()
+                const query= req.query
+                const tours = await TourService.getAllTour(query as Record<string,string>)
                   
             
                     // res.status(httpStatus.CREATED).json({

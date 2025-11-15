@@ -1,4 +1,5 @@
 import AppError from "../../errorHelper/AppError"
+import { searchFields } from "./Tour.constant";
 import { ITour, ITourType } from "./Tour.interface"
 import { Tour, TourType } from "./Tour.model"
 import httpStatus from 'http-status-codes';
@@ -81,7 +82,7 @@ const createTour = async (payload: ITour) => {
 
 
 
-    const isTourExist = await Tour.findOne({ title:payload.title })
+    const isTourExist = await Tour.findOne({ title: payload.title })
     if (isTourExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "TOUR ALREADY EXIST")
     }
@@ -104,11 +105,20 @@ const createTour = async (payload: ITour) => {
 }
 
 
-const getAllTour = async () => {
-    const tour = await Tour.find({})
+const getAllTour = async (query: Record<string, string>) => {
+
+    const filter = query
+    const searchTerm = query.searchTerm || "";
+    const sort = query.sort || "-createdAt"
+    delete filter["searchTerm"]
+    const searchQuery={
+       $or: searchFields.map(field=>({[field]: { $regex: searchTerm, $options: "i" } }))
+    } 
+    const tours = await Tour.find(searchQuery).find(filter).sort(sort)
+    console.log(searchTerm)
     const totalTour = await Tour.countDocuments()
     return {
-        data: tour,
+        data: tours,
         meta: {
             total: totalTour
         }
@@ -129,7 +139,7 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
     //     const baseSlug = payload.title.toLowerCase().split(" ").join("-")
     //     let slug = `${baseSlug}-division`
     //     console.log("slug", slug)
-    
+
     //     let counter = 0
     //     while (await Tour.exists({ slug })) {
     //       slug = `${slug}-${counter++}`
