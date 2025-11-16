@@ -120,7 +120,6 @@ const getAllTour = async (query: Record<string, string>) => {
     delete filter["searchTerm"]
     delete  filter["sort"]
 
-    console.log(fields)
 
 
     for(const field of excludFields){
@@ -132,17 +131,29 @@ const getAllTour = async (query: Record<string, string>) => {
        $or: searchFields.map(field=>({[field]: { $regex: searchTerm, $options: "i" } }))
     } 
     const tours = await Tour.find(searchQuery).find(filter).sort(sort).select(fields).skip(skip).limit(limit)
-    console.log(searchTerm)
+
+    // const filterQuery= Tour.find(filter)
+
+    // const tours= filterQuery.find(searchQuery)
+
+    // const allTours= await tours.sort(sort).select(fields).skip(skip).limit(limit)
+
+    // console.log(searchTerm)
     const totalTour = await Tour.countDocuments()
 
+    const totalPage=Math.ceil(totalTour/limit)
 
-    
+    const meta={
+        page:page,
+        limit:limit,
+        total:totalTour,
+        totalPage:totalPage
+
+    }
 
     return {
         data: tours,
-        meta: {
-            total: totalTour
-        }
+        meta: meta
     }
 }
 
