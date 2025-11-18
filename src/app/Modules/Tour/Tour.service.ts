@@ -117,81 +117,29 @@ const getAllTour = async (query: Record<string, string>) => {
    
     const queryBuilder = new QueryBuilder(Tour.find(),query)
 
-    const tours = await queryBuilder.search(searchFields).filter().modelQuery
+    const tours = await queryBuilder
+                .search(searchFields)
+                .filter()
+                .fields()
+                .paginate()
+                .sort()
 
    
+
+    const [data,meta]= await Promise.all([
+        tours.build(),
+        queryBuilder.getMeta()
+    ])
 
     // console.log(searchTerm)
     const totalTour = await Tour.countDocuments()
 
-    // const totalPage = Math.ceil(totalTour / limit)
-
-    // const meta = {
-    //     page: page,
-    //     limit: limit,
-    //     total: totalTour,
-    //     totalPage: totalPage
-
-    // }
-
     return {
-        data: tours,
-        // meta: meta
+        data: data,
+        meta:meta
     }
 }
 
-
-
-// const getAllTour = async (query: Record<string, string>) => {
-
-//     const filter = query
-//     const searchTerm = query.searchTerm || "";
-//     const sort = query.sort || "-createdAt"
-//     const fields=query.fields?.split(",").join(" ") || ""
-
-//     const page= Number(query.page) || 1
-//     const limit=Number(query.limit) || 10
-//     const skip=(page-1) * (limit)
-
-//     delete filter["searchTerm"]
-//     delete  filter["sort"]
-
-
-
-//     for(const field of excludFields){
-//         delete filter[field]
-//     }
-
-
-//     const searchQuery={
-//        $or: searchFields.map(field=>({[field]: { $regex: searchTerm, $options: "i" } }))
-//     } 
-//     // const tours = await Tour.find(searchQuery).find(filter).sort(sort).select(fields).skip(skip).limit(limit)
-
-//     const filterQuery= Tour.find(filter)
-
-//     const tours= filterQuery.find(searchQuery)
-
-//     const allTours= await tours.sort(sort).select(fields).skip(skip).limit(limit)
-
-//     // console.log(searchTerm)
-//     const totalTour = await Tour.countDocuments()
-
-//     const totalPage=Math.ceil(totalTour/limit)
-
-//     const meta={
-//         page:page,
-//         limit:limit,
-//         total:totalTour,
-//         totalPage:totalPage
-
-//     }
-
-//     return {
-//         data: allTours,
-//         meta: meta
-//     }
-// }
 
 
 const updateTour = async (id: string, payload: Partial<ITour>) => {
