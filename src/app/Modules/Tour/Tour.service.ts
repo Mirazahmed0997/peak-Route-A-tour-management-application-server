@@ -1,7 +1,7 @@
 import { Query } from "mongoose";
 import AppError from "../../errorHelper/AppError"
 import { excludFields } from "../../globalConstants";
-import { searchFields } from "./Tour.constant";
+import { searchFields, TourTypeSearchFields } from "./Tour.constant";
 import { ITour, ITourType } from "./Tour.interface"
 import { Tour, TourType } from "./Tour.model"
 import httpStatus from 'http-status-codes';
@@ -32,14 +32,36 @@ const createTourType = async (payload: ITourType) => {
 
 
 
-const getAllTourTypes = async () => {
-    const tourType = await TourType.find({})
-    const totalTourType = await TourType.countDocuments()
+const getAllTourTypes = async (query: Record<string, string>) => {
+
+
+    const queryBuilder = new QueryBuilder(TourType.find(),query)
+    const tourTypes = await queryBuilder
+                .search(TourTypeSearchFields)
+                .filter()
+                .fields()
+                .paginate()
+                .sort()
+
+   
+
+    const [data,meta]= await Promise.all([
+        tourTypes.build(),
+        queryBuilder.getMeta()
+    ])
+
+    return {
+        data,
+        meta
+    }
+}
+
+
+const getSingleTourType = async (id : string) => {
+    const tourType = await TourType.findOne({id:id})
     return {
         data: tourType,
-        meta: {
-            total: totalTourType
-        }
+      
     }
 }
 
@@ -131,12 +153,21 @@ const getAllTour = async (query: Record<string, string>) => {
         queryBuilder.getMeta()
     ])
 
-    // console.log(searchTerm)
-    const totalTour = await Tour.countDocuments()
 
     return {
-        data: data,
-        meta:meta
+        data,
+        meta
+    }
+}
+
+
+
+const getSingleTour = async (id: string) => {
+
+   
+    const getSingleTour = Tour.findOne({_id:id})
+    return {
+        data: getSingleTour,
     }
 }
 
@@ -197,12 +228,14 @@ export const TourTypeService = {
     getAllTourTypes,
     updateTourType,
     deleteTourType,
+    getSingleTourType
 
 }
 export const TourService = {
     createTour,
     getAllTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    getSingleTour
 
 }
