@@ -13,6 +13,8 @@ export interface ITour{
     images?:string[];
     location?:string;
     description?:string;
+    depurtureLocation?: string;
+    arivalLocationl?: string;
     costFrom?:number;
     startDate?: Date;
     endDate?: Date;
