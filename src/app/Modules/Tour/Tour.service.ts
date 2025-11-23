@@ -35,34 +35,32 @@ const createTourType = async (payload: ITourType) => {
 const getAllTourTypes = async (query: Record<string, string>) => {
 
 
-    const queryBuilder = new QueryBuilder(TourType.find(),query)
-    const tourTypes = await queryBuilder
-                .search(TourTypeSearchFields)
-                .filter()
-                .fields()
-                .paginate()
-                .sort()
-
-   
-
-    const [data,meta]= await Promise.all([
+    const queryBuilder = new QueryBuilder(TourType.find(), query)
+    
+      const tourTypes = await queryBuilder
+        .search(TourTypeSearchFields)
+        .filter()
+        .fields()
+        .paginate()
+        .sort()
+    
+      const [data, meta] = await Promise.all([
         tourTypes.build(),
         queryBuilder.getMeta()
-    ])
-
-    return {
+      ])
+    
+      return {
         data,
         meta
-    }
+      }
 }
 
 
 const getSingleTourType = async (id : string) => {
-    const tourType = await TourType.findOne({id:id})
-    return {
-        data: tourType,
+    const tourType = await TourType.findOne({_id:id})
+    return tourType
       
-    }
+
 }
 
 
@@ -165,10 +163,8 @@ const getAllTour = async (query: Record<string, string>) => {
 const getSingleTour = async (id: string) => {
 
    
-    const getSingleTour = Tour.findOne({_id:id})
-    return {
-        data: getSingleTour,
-    }
+    const singleTour =await Tour.findOne({_id:id})
+    return singleTour
 }
 
 

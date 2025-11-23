@@ -28,12 +28,9 @@ const createTourType = catchAsynch(async (req: Request, res: Response, next: Nex
 
 const getAllTourTypes = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
   const query=req.query
+  console.log(query)
   const tourTypes = await TourTypeService.getAllTourTypes(query as Record<string, string>)
 
-
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
@@ -42,8 +39,13 @@ const getAllTourTypes = catchAsynch(async (req: Request, res: Response, next: Ne
   })
 })
 
+
+
+
+
 const getSingleTourType = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id
+  console.log(id)
   const tours = await TourTypeService.getSingleTourType(id as string)
 
 
@@ -57,6 +59,8 @@ const getSingleTourType = catchAsynch(async (req: Request, res: Response, next: 
     data: tours,
   })
 })
+
+
 
 
 const updateTourType = catchAsynch(
@@ -121,13 +125,9 @@ const getAllTour = catchAsynch(async (req: Request, res: Response, next: NextFun
   const query = req.query
   const tours = await TourService.getAllTour(query as Record<string, string>)
 
-
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.CREATED,
+      statusCode: httpStatus.OK,
     message: "Get all Tour successfully",
     data: tours,
   })
@@ -138,17 +138,15 @@ const getAllTour = catchAsynch(async (req: Request, res: Response, next: NextFun
 const getSingleTour = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
   
   const id = req.params.id
-  console.log("controller",id)
+  console.log("id",id)
   const tour = await TourService.getSingleTour(id as string)
 
 
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
+  
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.CREATED,
-    message: "Get all Tour successfully",
+      statusCode: httpStatus.OK,
+    message: "Get Tour successfully",
     data: tour,
   })
 })
@@ -206,6 +204,4 @@ export const TourControllers = {
   updateTour,
   deleteTour,
   getSingleTour
-
-
 }
