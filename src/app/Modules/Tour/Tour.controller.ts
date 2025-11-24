@@ -60,9 +60,6 @@ const getSingleTourType = catchAsynch(async (req: Request, res: Response, next: 
   })
 })
 
-
-
-
 const updateTourType = catchAsynch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params; // ✅ get division ID from URL

@@ -14,4 +14,4 @@ const bookingSchema= new Schema<Ibooking>({
 })
 
 
-const Booking =  model<Ibooking>("Booking",bookingSchema)
+export const Booking =  model<Ibooking>("Booking",bookingSchema)
