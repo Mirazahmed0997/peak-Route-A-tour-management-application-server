@@ -1,3 +1,3 @@
 
 
-export  const searchFields=["name","slug","description"]
+export  const searchFields=["user","tour","payment"]

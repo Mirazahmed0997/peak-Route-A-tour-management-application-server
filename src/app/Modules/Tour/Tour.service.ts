@@ -40,7 +40,7 @@ const getAllTourTypes = async (query: Record<string, string>) => {
       const tourTypes = await queryBuilder
         .search(TourTypeSearchFields)
         .filter()
-        .fields()
+        .fields() 
         .paginate()
         .sort()
     

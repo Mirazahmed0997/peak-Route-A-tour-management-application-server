@@ -21,7 +21,30 @@ export const BookingSchema = z.object({
     .min(1, "guestCount must be at least 1"),
 });
 
-export const CreateBookingSchema = BookingSchema;
+export const CreateBookingZodSchema = BookingSchema;
 
 
-export type BookingInput = z.infer<typeof CreateBookingSchema>;
+export type BookingInput = z.infer<typeof CreateBookingZodSchema>;
+
+
+
+
+
+export const BookingUpdateSchema = z.object({
+  user: objectIdSchema,
+  tour: objectIdSchema,
+  payment: objectIdSchema,
+  status: z
+    .enum(Object.values(BOOKING_STATUS) as [string, ...string[]])
+    .optional(),
+  guestCount: z
+    .number( "guestCount must be a number" )
+    .int()
+    .min(1, "guestCount must be at least 1")
+    .optional(),
+});
+
+export const UpdateBookingZodSchema = BookingUpdateSchema;
+
+
+export type BookingUpdateInput = z.infer<typeof UpdateBookingZodSchema>;
