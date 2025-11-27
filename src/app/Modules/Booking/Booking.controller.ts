@@ -40,7 +40,7 @@ const getSingleBookings = catchAsynch(async (req: Request, res: Response, next: 
 
 
     const id = req.params.id as string
-    console.log(id)
+    // console.log(id)
     const bookings = await BookingService.getSingleBookings(id)
 
     sendResponse(res, {

@@ -47,11 +47,12 @@ const getAllBookings = async (query: Record<string, string>) => {
 
 
 
-const getSingleBookings = async (slug: string) => {
-    
-  const division = await Booking.findOne({slug})
+const getSingleBookings = async (id: string) => {
+
+  console.log("booking Id",id)
+const booking = await Booking.findById(id);
   return {
-    data: division,
+    data: booking,
   }
 }
 

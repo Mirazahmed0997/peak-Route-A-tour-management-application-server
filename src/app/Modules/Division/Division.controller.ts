@@ -31,9 +31,6 @@ const getDivision = catchAsynch(async (req: Request, res: Response, next: NextFu
   const divisions = await DivisionService.getAllDivisions(query as Record<string, string>)
 
 
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
@@ -54,7 +51,7 @@ const getSingleDivision = catchAsynch(async (req: Request, res: Response, next: 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: "Get all Division successfully",
+    message: "Get single Division successfully",
     data: divisions,
   })
 })
