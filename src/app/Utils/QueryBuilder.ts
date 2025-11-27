@@ -1,6 +1,5 @@
-import { Query } from "mongoose";
+import mongoose, { Query } from "mongoose";
 import { excludFields } from "../globalConstants";
-import { searchFields } from "../Modules/Tour/Tour.constant";
 
 export class QueryBuilder<T> {
     public modelQuery: Query<T[], T>;
@@ -22,14 +21,39 @@ export class QueryBuilder<T> {
 
     }
 
-    search(searchableField: string[]): this {
-        const searchTerm = this.query.searchTerm || ""
-        const searchQuery = {
-            $or: searchFields.map(field => ({ [field]: { $regex: searchTerm, $options: "i" } }))
+    // search(searchableField: string[]): this {
+    //     const searchTerm = this.query.searchTerm || ""
+    //     const searchQuery = {
+    //         $or: searchableField.map(field => ({ [field]: { $regex: searchTerm, $options: "i" } }))
+    //     }
+    //     this.modelQuery = this.modelQuery.find(searchQuery)
+    //     return this
+    // }
+
+
+
+    search(searchableFields: string[]): this {
+        const searchTerm = this.query.searchTerm;
+        if (!searchTerm) return this;
+
+        const orQueries = [];
+
+        for (const field of searchableFields) {
+            // check if field is ObjectId
+            if (mongoose.Types.ObjectId.isValid(searchTerm)) {
+                orQueries.push({ [field]: searchTerm });
+            } else {
+                // normal regex search for string fields
+                orQueries.push({
+                    [field]: { $regex: searchTerm, $options: "i" }
+                });
+            }
         }
-        this.modelQuery = this.modelQuery.find(searchQuery)
-        return this
+
+        this.modelQuery = this.modelQuery.find({ $or: orQueries });
+        return this;
     }
+
 
 
     sort(): this {
@@ -65,7 +89,7 @@ export class QueryBuilder<T> {
             page,
             limit,
             totalPage,
-            total:totalDocuments
+            total: totalDocuments
         }
     }
 
