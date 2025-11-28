@@ -4,14 +4,17 @@ import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from "http-status-codes"
 import { string } from "zod"
 import { BookingService } from "./Booking.service"
+import { JwtPayload } from "jsonwebtoken"
 
 
 
 
 
 const createBooking = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-    const {id} = req.params
-    const booikings = await BookingService.createBooking(req.body, id as string)
+
+    const decoddedToken= req.user as JwtPayload
+
+    const booikings = await BookingService.createBooking(req.body, decoddedToken.userId)
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
@@ -26,6 +29,18 @@ const getAllBookings = catchAsynch(async (req: Request, res: Response, next: Nex
     const query = req.query
     console.log(query)
     const bookings = await BookingService.getAllBookings(query as Record<string, string>)
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Get all Bookings successfully",
+        data: bookings,
+    })
+})
+
+
+const getUserBooking = catchAsynch(async (req: Request, res: Response) => {
+    const query = req.query
+    const bookings = await BookingService.getUserBookings(query as Record<string, string>)
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -92,7 +107,8 @@ const deleteBooking = catchAsynch(
 export const BookingControllers = {
     createBooking,
     getAllBookings,
+    getUserBooking,
     getSingleBookings,
     updateBooking,
-    deleteBooking
+    deleteBooking,
 }
