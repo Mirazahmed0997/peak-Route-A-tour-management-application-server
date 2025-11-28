@@ -11,11 +11,18 @@ import { CreateBookingZodSchema, UpdateBookingZodSchema } from "./Booking.valida
 
 const router =Router()
 
-router.post('/create',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
+router.post('/create',verifyAuth(...Object.values(Role)),
 validateRequest(CreateBookingZodSchema),
 BookingControllers.createBooking)
-router.get('/',BookingControllers.getAllBookings)
-router.get('/:id',BookingControllers.getSingleBookings)
+
+
+router.get('/',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),BookingControllers.getAllBookings)
+
+
+router.get('/my-bookings',verifyAuth(...Object.values(Role)),BookingControllers.getUserBooking)
+
+
+router.get('/:id',verifyAuth(...Object.values(Role)),BookingControllers.getSingleBookings)
 
 router.patch('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
 validateRequest(UpdateBookingZodSchema),

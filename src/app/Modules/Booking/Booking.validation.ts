@@ -9,12 +9,7 @@ export const objectIdSchema = z
   .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid ObjectId" });
 
 export const BookingSchema = z.object({
-  user: objectIdSchema,
-  tour: objectIdSchema,
-  payment: objectIdSchema,
-  status: z
-    .enum(Object.values(BOOKING_STATUS) as [string, ...string[]])
-    .optional(),
+  tour: z.string(),
   guestCount: z
     .number( "guestCount must be a number" )
     .int()
@@ -31,16 +26,9 @@ export type BookingInput = z.infer<typeof CreateBookingZodSchema>;
 
 
 export const BookingUpdateSchema = z.object({
-  user: objectIdSchema,
-  tour: objectIdSchema,
-  payment: objectIdSchema,
+
   status: z
     .enum(Object.values(BOOKING_STATUS) as [string, ...string[]])
-    .optional(),
-  guestCount: z
-    .number( "guestCount must be a number" )
-    .int()
-    .min(1, "guestCount must be at least 1")
     .optional(),
 });
 
