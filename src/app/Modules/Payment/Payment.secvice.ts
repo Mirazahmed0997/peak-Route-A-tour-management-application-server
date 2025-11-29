@@ -1,31 +1,60 @@
 import AppError from "../../errorHelper/AppError"
 import { QueryBuilder } from "../../Utils/QueryBuilder";
 import httpStatus from 'http-status-codes';
-import { IPayment } from "./Payment.interface";
+import { IPayment, PAYMENT_STATUS } from "./Payment.interface";
 import { Payment } from "./Payment.model";
 import { searchFields } from "./Payment.Constant";
+import { Booking } from "../Booking/Booking.model";
+import { BOOKING_STATUS } from "../Booking/Booking.interface";
+import { success } from "zod";
 
 
 
 
 
 
-const createPayment = async (payload: IPayment,paymentID:string) => {
+const successPayment = async (query: Record<string, string>) => {
+
+  // update booking status to confirm and paid
+  const session = await Booking.startSession();
+  session.startTransaction()
+
+  try {
+    // const booking= await Booking.findByIdAndUpdate()
+    const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
+      status: PAYMENT_STATUS.PAID,
+    }, { session })
 
 
-const id=paymentID
+    await Booking
+      .findByIdAndUpdate(
+        updatedPayment?.booking._id,
+        { status: BOOKING_STATUS.COMPLETE },
+        { new: true, runValidators: true, session })
+      .populate("user", "name email phone address")
+      .populate("tour", "title costFrom")
+      .populate("payment")
 
-  const isExist = await Payment.findOne({id})
-  if (isExist) {
-    throw new AppError(httpStatus.BAD_REQUEST, "PAYMENT  ALREADY EXIST")
+
+    await session.commitTransaction()
+    session.endSession()
+
+    return { success: true, message: "Payment completed successfully" }
+
+
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession()
+    throw error
   }
-  const payment = Payment.create(payload)
-  return payment;
 }
 
 
-const getAllPayments = async (query: Record<string, string>) => {
-  
+const failPayment = async (query: Record<string, string>) => {
+
+  // update booking status to confirm and paid
+
+
   const queryBuilder = new QueryBuilder(Payment.find(), query)
 
   const payments = await queryBuilder
@@ -48,9 +77,12 @@ const getAllPayments = async (query: Record<string, string>) => {
 
 
 
-const getSinglePayments = async (id: string) => {
-    
-  const payment = await Payment.findOne({id})
+const cancelPayment = async (id: string) => {
+
+  // update booking status to confirm and paid
+
+
+  const payment = await Payment.findOne({ id })
   return {
     data: payment,
   }
@@ -58,42 +90,13 @@ const getSinglePayments = async (id: string) => {
 
 
 
-// const updateBooking = async (id: string, payload: Partial<Ibooking>) => {
-
-//   const isExist = await Payment.findById(id);
-
-//   if (!isExist) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
-//   }
-
-  
-//   const updatedBookings = await Booking.findByIdAndUpdate(id, payload, {
-//     new: true, 
-//     runValidators: true,
-//   });
-
-//   return updatedBookings;
-// };
-
-
-const deletePayment = async (id: string) => {
-  const isExist = await Payment.findById(id);
-
-  if (!isExist) {
-    throw new AppError(httpStatus.NOT_FOUND, "Payment not found");
-  }
-
-  const deletedPayment = await Payment.findByIdAndDelete(id)
-  return deletedPayment
-};
 
 
 
 
 
 export const PaymentService = {
-  createPayment,
-  getAllPayments,
-  getSinglePayments,
-  deletePayment
+  successPayment,
+  failPayment,
+  cancelPayment,
 }

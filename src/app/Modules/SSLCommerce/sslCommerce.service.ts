@@ -14,7 +14,7 @@ try {
         total_amount: payload.amount,
         currency: "BDT",
         tran_id: payload.transactionId,
-        success_url: envVars.SSL.SSL_SUCCESS_BACKEND_URL,
+        success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}`,
         fail_url: envVars.SSL.SSL_FAIL_BACKEND_URL,
         cancel_url: envVars.SSL.SSL_CANCEL_BACKEND_URL,
 
@@ -49,7 +49,7 @@ try {
         method:"POST",
         url: envVars.SSL.SSL_PAYMENT_API,
         data:data,
-        headers:{"Content-Type": "application/x-www-form-urlencodded"}
+        headers:{"Content-Type": "application/x-www-form-urlencoded"}
     })
 
     return response.data
