@@ -36,10 +36,10 @@ const moduleRoutes=[
         path:'/Booking',
         route: BookingRoutes
     },
-    // {
-    //     path:'/Payment',
-    //     route: PaymentRoute
-    // },
+    {
+        path:'/Payment',
+        route: PaymentRoute
+    },
 ]
 
 moduleRoutes.forEach((route)=>
