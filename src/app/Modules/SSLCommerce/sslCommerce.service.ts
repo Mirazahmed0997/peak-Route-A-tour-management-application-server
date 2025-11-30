@@ -14,9 +14,9 @@ try {
         total_amount: payload.amount,
         currency: "BDT",
         tran_id: payload.transactionId,
-        success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}`,
-        fail_url: envVars.SSL.SSL_FAIL_BACKEND_URL,
-        cancel_url: envVars.SSL.SSL_CANCEL_BACKEND_URL,
+        success_url: `${envVars.SSL.SSL_SUCCESS_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=success`,
+        fail_url: `${envVars.SSL.SSL_FAIL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=fail`,
+        cancel_url: `${envVars.SSL.SSL_CANCEL_BACKEND_URL}?transactionId=${payload.transactionId}&amount=${payload.amount}&status=cancel`,
 
         shipping_method: "N/A",
         product_name: "Tour Management",

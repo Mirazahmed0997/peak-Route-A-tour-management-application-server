@@ -38,7 +38,9 @@ interface EnvConfig {
 const loadEnvVariables = (): EnvConfig => {
     const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "jwt_access_expire",
         "jwt_access_secret", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_EXPIRE_SECRET", "JWT_REFRESH_SECRET", "GOOGLE_CLIENT_SECRET",
+        
         "GOOGLE_CLIENT_ID", "GOOGLE_CALLBACK_URL", "EXPRESS_SESSION_SECRET", "FRONTEND_URL", 
+
         "SSL_STORE_ID", "SSL_STORE_PASS", "SSL_PAYMENT_API", "SSL_VALIDATION_API", "SSL_SUCCESS_BACKEND_URL", "SSL_FAIL_BACKEND_URL", "SSL_CANCEL_BACKEND_URL", "SSL_SUCCESS_FRONTEND_URL", "SSL_FAIL_FRONTEND_URL", "SSL_CANCEL_FRONTEND_URL"]
 
     requiredEnvVariables.forEach(key => {
@@ -74,9 +76,9 @@ const loadEnvVariables = (): EnvConfig => {
             SSL_SUCCESS_BACKEND_URL: process.env.SSL_SUCCESS_BACKEND_URL as string,
             SSL_FAIL_BACKEND_URL: process.env.SSL_FAIL_BACKEND_URL as string,
             SSL_CANCEL_BACKEND_URL: process.env.SSL_CANCEL_BACKEND_URL as string,
-            SSL_SUCCESS_FRONTEND_URL: process.env.SSL_SUCCESS_FRONEND_URL as string,
-            SSL_FAIL_FRONTEND_URL: process.env.SSL_FAIL_FRONEND_URL as string,
-            SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONEND_URL as string,
+            SSL_SUCCESS_FRONTEND_URL: process.env.SSL_SUCCESS_FRONTEND_URL as string,
+            SSL_FAIL_FRONTEND_URL: process.env.SSL_FAIL_FRONTEND_URL as string,
+            SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONTEND_URL as string,
         },
 
 

@@ -10,9 +10,11 @@ import { PaymentController } from "./Payment.controller";
 
 const router =Router()
 
+
+router.post('/init-payment/:bookingId',PaymentController.initPayment)
 router.post('/success',PaymentController.successPayment)
-router.get('/fail',)
-router.get('/cancel',)
+router.post('/fail',PaymentController.failPayment)
+router.post('/cancel',PaymentController.cancelPayment)
 
 
 
