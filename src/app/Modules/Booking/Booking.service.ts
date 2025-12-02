@@ -132,27 +132,9 @@ const getAllBookings = async (query: Record<string, string>) => {
     meta
   }
 }
-const getUserBookings = async (query: Record<string, string>) => {
 
-  const queryBuilder = new QueryBuilder(Booking.find(), query)
 
-  const bookings = await queryBuilder
-    .search(searchFields)
-    .filter()
-    .fields()
-    .paginate()
-    .sort()
 
-  const [data, meta] = await Promise.all([
-    bookings.build(),
-    queryBuilder.getMeta()
-  ])
-
-  return {
-    data,
-    meta
-  }
-}
 
 
 
@@ -160,6 +142,15 @@ const getSingleBookings = async (id: string) => {
 
   console.log("booking Id", id)
   const booking = await Booking.findById(id);
+  return {
+    data: booking,
+  }
+}
+
+
+const getUserBooking = async (userId: string) => {
+
+  const booking = await Booking.find({user:userId});
   return {
     data: booking,
   }
@@ -175,28 +166,7 @@ const updateBooking = async (id: string, payload: Partial<Ibooking>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
   }
 
-  // const duplicateBooking = await Booking.findOne({
-  //   name: payload.name,
-  //   _id: { $ne: id }
-  // })
-
-  // if (duplicateDivision) {
-  //   throw new Error("A division with this name is already exists")
-  // }
-
-  // if (payload.name) {
-  //   const baseSlug = payload.name.toLowerCase().split(" ").join("-")
-  //   let slug = `${baseSlug}-division`
-  //   console.log("slug", slug)
-
-  //   let counter = 0
-  //   while (await Division.exists({ slug })) {
-  //     slug = `${slug}-${counter++}`
-  //   }
-  //   payload.slug = slug
-  // }
-
-  // Update division
+  
 
   const updatedBookings = await Booking.findByIdAndUpdate(id, payload, {
     new: true,
@@ -225,7 +195,7 @@ const deleteBooking = async (id: string) => {
 export const BookingService = {
   createBooking,
   getAllBookings,
-  getUserBookings,
+  getUserBooking,
   getSingleBookings,
   updateBooking,
   deleteBooking

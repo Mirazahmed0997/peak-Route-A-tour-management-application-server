@@ -31,6 +31,12 @@ interface EnvConfig {
         SSL_FAIL_FRONTEND_URL: string,
         SSL_CANCEL_FRONTEND_URL: string,
     },
+    CLOUDINARY: {
+        CLOUDINARY_CLOUD_NAME: string,
+        CLOUDINARY_API_KEY: string,
+        CLOUDINARY_API_SECRET: string
+    }
+
 
 
 }
@@ -38,10 +44,14 @@ interface EnvConfig {
 const loadEnvVariables = (): EnvConfig => {
     const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "jwt_access_expire",
         "jwt_access_secret", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASSWORD", "JWT_EXPIRE_SECRET", "JWT_REFRESH_SECRET", "GOOGLE_CLIENT_SECRET",
-        
-        "GOOGLE_CLIENT_ID", "GOOGLE_CALLBACK_URL", "EXPRESS_SESSION_SECRET", "FRONTEND_URL", 
 
-        "SSL_STORE_ID", "SSL_STORE_PASS", "SSL_PAYMENT_API", "SSL_VALIDATION_API", "SSL_SUCCESS_BACKEND_URL", "SSL_FAIL_BACKEND_URL", "SSL_CANCEL_BACKEND_URL", "SSL_SUCCESS_FRONTEND_URL", "SSL_FAIL_FRONTEND_URL", "SSL_CANCEL_FRONTEND_URL"]
+        "GOOGLE_CLIENT_ID", "GOOGLE_CALLBACK_URL", "EXPRESS_SESSION_SECRET", "FRONTEND_URL",
+
+        "SSL_STORE_ID", "SSL_STORE_PASS", "SSL_PAYMENT_API", "SSL_VALIDATION_API", "SSL_SUCCESS_BACKEND_URL", "SSL_FAIL_BACKEND_URL", "SSL_CANCEL_BACKEND_URL", "SSL_SUCCESS_FRONTEND_URL", "SSL_FAIL_FRONTEND_URL", "SSL_CANCEL_FRONTEND_URL",
+
+        "CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET"
+
+    ]
 
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
@@ -80,6 +90,11 @@ const loadEnvVariables = (): EnvConfig => {
             SSL_FAIL_FRONTEND_URL: process.env.SSL_FAIL_FRONTEND_URL as string,
             SSL_CANCEL_FRONTEND_URL: process.env.SSL_CANCEL_FRONTEND_URL as string,
         },
+        CLOUDINARY: {
+            CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME as string,
+            CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY as string,
+            CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET as string
+        }
 
 
     }
