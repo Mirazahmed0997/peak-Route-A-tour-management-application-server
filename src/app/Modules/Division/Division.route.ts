@@ -4,12 +4,15 @@ import { Role } from "../User/User.interface";
 import { divisionControllers } from "./Division.controller";
 import { validateRequest } from "../../middlewares/validateRequest";
 import { createDivisionZodSchema, updateDivisionZodSchema } from "./Division.Validation";
+import { multerUpload } from "../../Config/multer.config";
 
 
 
 const router =Router()
 
-router.post('/create',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
+router.post('/create',
+    multerUpload.single("file"),
+    verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
 // validateRequest(createDivisionZodSchema),
 divisionControllers.createDivision)
 router.get('/',divisionControllers.getDivision)

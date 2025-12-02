@@ -10,12 +10,15 @@ import { string } from "zod"
 
 
 const createDivision = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
+
+
   const user = await DivisionService.createDivision(req.body)
 
+  console.log({
+    file: req.file,
+    body:req.body
+  })
 
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
