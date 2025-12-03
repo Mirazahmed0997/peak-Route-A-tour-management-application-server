@@ -3,6 +3,8 @@ import { catchAsynch } from "../../Utils/CatchAsync"
 import { TourService, TourTypeService } from "./Tour.service"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from 'http-status-codes';
+import { ITour } from "./Tour.interface";
+import AppError from "../../errorHelper/AppError";
 
 
 
@@ -12,9 +14,7 @@ const createTourType = catchAsynch(async (req: Request, res: Response, next: Nex
   const tourType = await TourTypeService.createTourType(req.body)
 
 
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
+  
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
@@ -101,12 +101,24 @@ const deleteTourType = catchAsynch(
 
 
 const createTour = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-  const tour = await TourService.createTour(req.body)
 
 
-  // res.status(httpStatus.CREATED).json({
-  //     message: "User successfully created"
-  // })
+
+  req.body=JSON.parse(req.body.data);
+
+  console.log({
+      body:req.body,
+      files:req.files
+    })
+
+  const payload:ITour={
+    ...req.body,
+    images: (req.files as Express.Multer.File[])?.map(file=> file.path)
+  }
+       
+  const tour = await TourService.createTour(payload)
+
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
