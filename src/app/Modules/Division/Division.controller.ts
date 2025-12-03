@@ -4,6 +4,7 @@ import { DivisionService } from "./Division.service"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from "http-status-codes"
 import { string } from "zod"
+import { Idivision } from "./Division.interface"
 
 
 
@@ -12,25 +13,26 @@ import { string } from "zod"
 const createDivision = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
 
 
-  const user = await DivisionService.createDivision(req.body)
+  req.body = JSON.parse(req.body.data)
+  const payload: Idivision = {
+    ...req.body,
+    thumnail: req.file?.path
+  }
+  const result = await DivisionService.createDivision(payload)
 
-  console.log({
-    file: req.file,
-    body:req.body
-  })
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
     message: "Division Create successfully",
-    data: user,
+    data: result,
   })
 })
 
 
 
 const getDivision = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-  const query=req.query
+  const query = req.query
   const divisions = await DivisionService.getAllDivisions(query as Record<string, string>)
 
 
@@ -45,8 +47,8 @@ const getDivision = catchAsynch(async (req: Request, res: Response, next: NextFu
 
 
 const getSingleDivision = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-  
-  
+
+
   const slug = req.params.slug as string
   console.log(slug)
   const divisions = await DivisionService.SingleDivision(slug)
