@@ -19,6 +19,7 @@ router.get('/',divisionControllers.getDivision)
 router.get('/:slug',divisionControllers.getSingleDivision)
 
 router.patch('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),
+multerUpload.single("file"),
 // validateRequest(updateDivisionZodSchema),
 divisionControllers.updateDivision)
 router.delete('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),divisionControllers.deleteDivision)

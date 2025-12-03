@@ -106,10 +106,6 @@ const createTour = catchAsynch(async (req: Request, res: Response, next: NextFun
 
   req.body=JSON.parse(req.body.data);
 
-  console.log({
-      body:req.body,
-      files:req.files
-    })
 
   const payload:ITour={
     ...req.body,
@@ -165,7 +161,13 @@ const getSingleTour = catchAsynch(async (req: Request, res: Response, next: Next
 const updateTour = catchAsynch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params; // ✅ get division ID from URL
-    const payload = req.body;  // ✅ get update data from request body
+   req.body=JSON.parse(req.body.data);
+
+
+  const payload:ITour={
+    ...req.body,
+    images: (req.files as Express.Multer.File[])?.map(file=> file.path)
+  }
 
     // ✅ call service with both id and payload
     const updatedTour = await TourService.updateTour(id as string, payload);

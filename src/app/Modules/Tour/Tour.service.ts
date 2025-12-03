@@ -6,6 +6,7 @@ import { ITour, ITourType } from "./Tour.interface"
 import { Tour, TourType } from "./Tour.model"
 import httpStatus from 'http-status-codes';
 import { QueryBuilder } from "../../Utils/QueryBuilder";
+import { deletImageFromCloudinary } from "../../Config/cloudunary.config";
 
 
 // Tour Type Services
@@ -167,18 +168,26 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
     }
 
 
-    //   if (payload.title) {
-    //     const baseSlug = payload.title.toLowerCase().split(" ").join("-")
-    //     let slug = `${baseSlug}-division`
-    //     console.log("slug", slug)
+    //  for include new images with older
+    if(payload.images && payload.images.length && isExist.images && isExist.images.length)
+    {
+        payload.images=[...payload.images,...isExist.images]
+    }
 
-    //     let counter = 0
-    //     while (await Tour.exists({ slug })) {
-    //       slug = `${slug}-${counter++}`
-    //     }
-    //     payload.slug = slug
-    //   }
+    // for delete selected images
 
+    if(payload.deleteImages && payload.deleteImages.length && isExist.images && isExist.images.length)
+    {
+        const restDbImages= isExist.images.filter(imgUrl=>!payload.deleteImages?.includes(imgUrl))
+
+        const updatedPayloadImages= (payload.images || [])
+        .filter(imgUrl=>!payload.deleteImages?.includes(imgUrl))
+        .filter(imgUrl=>!restDbImages?.includes(imgUrl))
+
+        payload.images=[...restDbImages,...updatedPayloadImages]
+    }
+
+    // 
 
 
     // Update division
@@ -186,6 +195,16 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
         new: true, // return the updated document
         runValidators: true, // run schema validators
     });
+
+
+
+    // for delete selected images
+
+    if(payload.deleteImages && payload.deleteImages.length && isExist.images && isExist.images.length)
+    {
+        await Promise.all(payload.deleteImages.map(url=>deletImageFromCloudinary(url)))
+    }
+
 
     return updatedTour;
 };
