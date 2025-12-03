@@ -39,8 +39,10 @@ const getAllBookings = catchAsynch(async (req: Request, res: Response, next: Nex
 
 
 const getUserBooking = catchAsynch(async (req: Request, res: Response) => {
-    const query = req.query
-    const bookings = await BookingService.getUserBookings(query as Record<string, string>)
+    // const query = req.query
+
+    const decoddedToken= req.user as JwtPayload
+    const bookings = await BookingService.getUserBooking(decoddedToken.userId)
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,

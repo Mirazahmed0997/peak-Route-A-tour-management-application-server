@@ -10,21 +10,21 @@ import httpStatus from 'http-status-codes';
 
 
 const createDivision = async (payload: Idivision) => {
-  const baseSlug = payload.name.toLowerCase().split(" ").join("-")
-  let slug = `${baseSlug}-division`
-  const name = payload.name
-  console.log("slug", slug)
+  // const baseSlug = payload.name.toLowerCase().split(" ").join("-")
+  // let slug = `${baseSlug}-division`
+  // const name = payload.name
+  // console.log("slug", slug)
 
-  let counter = 0
-  while (await Division.exists({ slug })) {
-    slug = `${slug}-${counter++}`
-  }
-
-
-  payload.slug = slug
+  // let counter = 0
+  // while (await Division.exists({ slug })) {
+  //   slug = `${slug}-${counter++}`
+  // }
 
 
-  const isDivisionExist = await Division.findOne({ name })
+  // payload.slug = slug
+
+
+  const isDivisionExist = await Division.findOne({name: payload.name })
   if (isDivisionExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "Division  ALREADY EXIST")
   }
