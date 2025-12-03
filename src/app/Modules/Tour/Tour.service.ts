@@ -104,7 +104,6 @@ const deleteTourType = async (id: string) => {
 const createTour = async (payload: ITour) => {
 
 
-
     const isTourExist = await Tour.findOne({ title: payload.title })
     if (isTourExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "TOUR ALREADY EXIST")

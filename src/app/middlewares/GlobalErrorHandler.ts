@@ -7,13 +7,25 @@ import { handleCastError } from "../Helpers/HandleCastError"
 import { handleZodError } from "../Helpers/HandleZodError"
 import { handleValidationError } from "../Helpers/HandleValidationError"
 import { TErrorSources } from "../interfaces/error.types"
+import { deletImageFromCloudinary } from "../Config/cloudunary.config"
 
 
 
-export const globalError=(err:any,req:Request,res:Response,next:NextFunction)=>
+export const globalError=async(err:any,req:Request,res:Response,next:NextFunction)=>
 {
     if(envVars.NODE_ENV==="Development"){
         console.log(err)
+    }
+
+
+    if(req.file){
+        await deletImageFromCloudinary(req.file.path)
+    }
+
+    if(req.files && Array.isArray(req.files) && req.files.length)
+    {
+        const imageUrls= (req.files as Express.Multer.File[])?.map(file=> file.path)
+        await Promise.all(imageUrls.map(url=>deletImageFromCloudinary(url)))
     }
 
     
