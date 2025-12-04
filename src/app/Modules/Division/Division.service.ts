@@ -1,3 +1,4 @@
+import { deletImageFromCloudinary } from "../../Config/cloudunary.config";
 import AppError from "../../errorHelper/AppError"
 import { QueryBuilder } from "../../Utils/QueryBuilder";
 import { searchFields } from "./Division.constant";
@@ -10,20 +11,6 @@ import httpStatus from 'http-status-codes';
 
 
 const createDivision = async (payload: Idivision) => {
-  // const baseSlug = payload.name.toLowerCase().split(" ").join("-")
-  // let slug = `${baseSlug}-division`
-  // const name = payload.name
-  // console.log("slug", slug)
-
-  // let counter = 0
-  // while (await Division.exists({ slug })) {
-  //   slug = `${slug}-${counter++}`
-  // }
-
-
-  // payload.slug = slug
-
-
   const isDivisionExist = await Division.findOne({name: payload.name })
   if (isDivisionExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "Division  ALREADY EXIST")
@@ -86,24 +73,15 @@ const updateDivision = async (id: string, payload: Partial<Idivision>) => {
   }
 
 
-
-  // if (payload.name) {
-  //   const baseSlug = payload.name.toLowerCase().split(" ").join("-")
-  //   let slug = `${baseSlug}-division`
-  //   console.log("slug", slug)
-
-  //   let counter = 0
-  //   while (await Division.exists({ slug })) {
-  //     slug = `${slug}-${counter++}`
-  //   }
-  //   payload.slug = slug
-  // }
-
-  // Update division
   const updatedDivision = await Division.findByIdAndUpdate(id, payload, {
     new: true, // return the updated document
     runValidators: true, // run schema validators
   });
+
+  if(payload.thumnail && isExist.thumnail)
+  {
+    await deletImageFromCloudinary(isExist.thumnail)
+  }
 
   return updatedDivision;
 };

@@ -64,9 +64,11 @@ const getSingleDivision = catchAsynch(async (req: Request, res: Response, next: 
 
 const updateDivision = catchAsynch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params; // ✅ get division ID from URL
-    const payload = req.body;  // ✅ get update data from request body
-
+    const { id } = req.params; 
+    const payload: Idivision = {
+      ...req.body,
+      thumnail: req.file?.path
+    }
     // ✅ call service with both id and payload
     const updatedDivision = await DivisionService.updateDivision(id as string, payload);
 
