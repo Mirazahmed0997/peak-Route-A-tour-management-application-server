@@ -8,18 +8,22 @@ import { sendResponse } from "../../Utils/sendResponse";
 import { verifyToken } from "../../Utils/jwt";
 import { envVars } from "../../Config/env";
 import { JwtPayload } from "jsonwebtoken";
+import { Iuser } from "./User.interface";
 
 
 
 
  const createUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
-    const user = await userServices.createUser(req.body)
+
+      req.body = JSON.parse(req.body.data)
+      const payload: Iuser = {
+        ...req.body,
+        picture: req.file?.path
+      }
+    const user = await userServices.createUser(payload)
       
 
-        // res.status(httpStatus.CREATED).json({
-        //     message: "User successfully created"
-        // })
         sendResponse(res,{
             success:true,
             statusCode:httpStatus.CREATED,
@@ -30,17 +34,23 @@ import { JwtPayload } from "jsonwebtoken";
 
  const updateUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
+    req.body = JSON.parse(req.body.data)
+    console.log("user",req.body)
     const userId= req.params.id
+    
     // const token= req.headers.authorization
     // const verifiedToken = verifyToken(token as string,envVars.jwt_access_secret) as JwtPayload
+
+
+
     const verifiedToken=req.user
-    const payload= req.body
+    const payload: Iuser = {
+        ...req.body,
+        picture: req.file?.path
+      }
     const user = await userServices.updateUser(userId as string,payload,verifiedToken as JwtPayload)
       
 
-        // res.status(httpStatus.CREATED).json({
-        //     message: "User successfully created"
-        // })
         sendResponse(res,{
             success:true,
             statusCode:httpStatus.CREATED,
@@ -51,11 +61,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 const getAllUsers=catchAsynch(async (req:Request,res:Response,next:NextFunction)=>{
          const result= await userServices.getAllUsers()
-        //  res.status(httpStatus.OK).json({
-        //     success:true,
-        //     message: "Get All Users",
-        //     data: users
-        //  })
+      
            sendResponse(res,{
             success:true,
             statusCode:httpStatus.CREATED,

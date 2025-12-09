@@ -13,7 +13,7 @@ const createUser= async (payload:Partial<Iuser>)=>
     const isUserExist= await User.findOne({email})
     if(isUserExist)
         {
-            throw new AppError(httpStatus.BAD_REQUEST,"USER  ALREADY EXIST")
+            throw new AppError(httpStatus.BAD_REQUEST,"USER ALREADY EXIST")
         }  
 
         const hashedPassword=await bcryptjs.hash(password as string,Number(envVars.BCRYPT_SALT_ROUND))
@@ -43,6 +43,7 @@ const createUser= async (payload:Partial<Iuser>)=>
 const updateUser=async(userId:string,payload:Partial<Iuser>,decotedToken:JwtPayload)=>
 {
 
+    console.log("user payload",payload)
     const isUserExist=await User.findById(userId)
 
     if(!isUserExist){
@@ -106,27 +107,23 @@ const getAllUsers=async ()=>
 const deleteUser = async (userId: string, decodedToken: JwtPayload) => {
     const isUserExist = await User.findById(userId);
   
-    // 🧩 Check if user exists
     if (!isUserExist) {
       throw new AppError(httpStatus.NOT_FOUND, "User not found");
     }
   
-    // 🧩 Prevent deleting already deleted or blocked users
     if (isUserExist.isDeleted) {
       throw new AppError(httpStatus.BAD_REQUEST, "User already deleted");
     }
   
-    // 🧩 Role-based restriction — normal users or guides cannot delete anyone
     if (decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE) {
       throw new AppError(httpStatus.FORBIDDEN, "Unauthorized access");
     }
   
-    // 🧩 Admin cannot delete SUPER_ADMIN accounts
     if (decodedToken.role === Role.ADMIN && isUserExist.role === Role.SUPER_ADMIN) {
       throw new AppError(httpStatus.FORBIDDEN, "Admins cannot delete Super Admins");
     }
   
-    // 🟡 SOFT DELETE (recommended)
+    // SOFT DELETE 
     const deletedUser = await User.findByIdAndUpdate(
       userId,
       { isDeleted: true, isActive: isActive.BLOCKED },

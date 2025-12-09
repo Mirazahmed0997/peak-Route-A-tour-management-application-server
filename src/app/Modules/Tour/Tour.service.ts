@@ -187,13 +187,12 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
         payload.images=[...restDbImages,...updatedPayloadImages]
     }
 
-    // 
 
 
-    // Update division
+
     const updatedTour = await Tour.findByIdAndUpdate(id, payload, {
-        new: true, // return the updated document
-        runValidators: true, // run schema validators
+        new: true, 
+        runValidators: true, 
     });
 
 

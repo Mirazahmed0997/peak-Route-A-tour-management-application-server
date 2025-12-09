@@ -69,10 +69,8 @@ const updateDivision = catchAsynch(
       ...req.body,
       thumnail: req.file?.path
     }
-    // ✅ call service with both id and payload
     const updatedDivision = await DivisionService.updateDivision(id as string, payload);
 
-    // ✅ send proper response
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK, // use 200 for update

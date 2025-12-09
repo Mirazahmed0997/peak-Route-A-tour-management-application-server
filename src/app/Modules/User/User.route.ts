@@ -7,6 +7,7 @@ import AppError from "../../errorHelper/AppError";
 import { Role } from "./User.interface";
 import { envVars } from "../../Config/env";
 import { verifyAuth } from "../../middlewares/CheckAuth";
+import { multerUpload } from "../../Config/multer.config";
 
 
 
@@ -19,12 +20,13 @@ const router =Router()
 
 
 router.post('/register',
+    multerUpload.single("file"),
     // validateRequest(createUserZodSchema),
     userControllers.createUser)
 
 // router.get('/AllUsers',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),userControllers.getAllUsers)
 router.get('/AllUsers',userControllers.getAllUsers)
-router.patch('/:id',validateRequest(updateUserZodSchema), verifyAuth(...Object.values(Role)),userControllers.updateUser)
+router.patch('/:id', verifyAuth(...Object.values(Role)),multerUpload.single("file"),userControllers.updateUser)
 router.delete('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),userControllers.deleteUser)
 
 export const userRoutes= router
