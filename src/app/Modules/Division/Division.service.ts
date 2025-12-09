@@ -63,19 +63,9 @@ const updateDivision = async (id: string, payload: Partial<Idivision>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Division not found");
   }
 
-  const duplicateDivision = await Division.findOne({
-    name: payload.name,
-    _id: { $ne: id }
-  })
-
-  if (duplicateDivision) {
-    throw new Error("A division with this name is already exists")
-  }
-
-
   const updatedDivision = await Division.findByIdAndUpdate(id, payload, {
-    new: true, // return the updated document
-    runValidators: true, // run schema validators
+    new: true, 
+    runValidators: true, 
   });
 
   if(payload.thumnail && isExist.thumnail)
