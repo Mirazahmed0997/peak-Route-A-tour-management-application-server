@@ -14,6 +14,7 @@ router.post('/log-out', authControllers.logOut)
 router.post('/resetPassword',verifyAuth(...Object.values(Role)), authControllers.resetPassword)
 router.post('/setPassword',verifyAuth(...Object.values(Role)), authControllers.setPassword)
 router.post('/changePassword',verifyAuth(...Object.values(Role)), authControllers.changePassword)
+router.post('/forgotPassword', authControllers.changePassword)
 
 
 
