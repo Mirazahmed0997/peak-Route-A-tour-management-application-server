@@ -56,7 +56,8 @@ const SingleDivision = async (slug: string) => {
 
 
 const updateDivision = async (id: string, payload: Partial<Idivision>) => {
-  // Check if the division exists
+
+
   const isExist = await Division.findById(id);
 
   if (!isExist) {

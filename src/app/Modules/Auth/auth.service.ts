@@ -1,5 +1,5 @@
 import AppError from "../../errorHelper/AppError"
-import { isActive, Iuser } from "../User/User.interface"
+import { IauthProvider, isActive, Iuser } from "../User/User.interface"
 import  httpStatus  from 'http-status-codes';
 import { User } from "../User/User.model";
 import bcryptjs from "bcryptjs"
@@ -58,6 +58,47 @@ const getNewAccessToken=async(refreshToken:string)=>{
 
 const resetPassword=async(oldPassword: string, newPassword: string, decodedToken:JwtPayload)=>{
 
+    
+    return {};
+ 
+}
+
+
+const setPassword=async(userId: string, plainPassword: string)=>{
+    
+    const user= await User.findById(userId)
+    if(!user)
+    {
+        throw new AppError(404,"User not found")
+    }
+
+    if(user.password && user.auths.some(providerObject=> providerObject.provider=="google"))
+    {
+        throw new AppError(httpStatus.BAD_REQUEST,"You have already set your password now ypu can change your password from profile")
+    }
+
+    const hashedPassword= await bcryptjs.hash(plainPassword,
+        Number(envVars.BCRYPT_SALT_ROUND)
+    )
+
+    const credintialProvider: IauthProvider={
+        provider:"credentials",
+        providerId:user.email
+    }
+
+    const auths : IauthProvider[]=[...user.auths,credintialProvider]
+
+    user.password=hashedPassword
+
+    user.auths=auths
+
+    await user.save()
+ 
+}
+
+
+const changePassword=async(oldPassword: string, newPassword: string, decodedToken:JwtPayload)=>{
+
     const user = await User.findById(decodedToken.userId)
 
     const isOldPasswordMatched= await bcryptjs.compare(oldPassword, user?.password as string)
@@ -74,5 +115,7 @@ const resetPassword=async(oldPassword: string, newPassword: string, decodedToken
 
 export  const  authServices={
     getNewAccessToken,
-    resetPassword
+    resetPassword,
+    changePassword,
+    setPassword
 }

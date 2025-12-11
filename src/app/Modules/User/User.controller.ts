@@ -35,7 +35,6 @@ import { Iuser } from "./User.interface";
  const updateUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
     req.body = JSON.parse(req.body.data)
-    console.log("user",req.body)
     const userId= req.params.id
     
     // const token= req.headers.authorization
