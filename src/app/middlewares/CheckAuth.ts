@@ -32,12 +32,12 @@ export const verifyAuth=(...authRoles:string[])=> async (req:Request,res:Respons
              throw new AppError(httpStatus.BAD_REQUEST,"USER  is deleted")
         }
 
-     if(!isUserExist?.isVerified)
+    if(!isUserExist?.isVerified)
           {
                throw new AppError(httpStatus.BAD_REQUEST,"User is not verified")
           }   
 
-          if(isUserExist?.isActive=== isActive.INACTIVE)
+     if(isUserExist?.isActive=== isActive.INACTIVE)
         {
              throw new AppError(httpStatus.BAD_REQUEST,"USER  is inactive")
         }
