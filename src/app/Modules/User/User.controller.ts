@@ -59,7 +59,8 @@ import { Iuser } from "./User.interface";
 })
 
 const getAllUsers=catchAsynch(async (req:Request,res:Response,next:NextFunction)=>{
-         const result= await userServices.getAllUsers()
+  const query = req.query
+         const result= await userServices.getAllUsers(query as Record<string, string>)
       
            sendResponse(res,{
             success:true,
@@ -67,6 +68,23 @@ const getAllUsers=catchAsynch(async (req:Request,res:Response,next:NextFunction)
             message:"Successfully Get all users",
             data:result.data,
             meta:result.meta
+        })
+})
+
+
+
+
+
+const getUsersProfile=catchAsynch(async (req:Request,res:Response,next:NextFunction)=>{
+
+         const decodedToken=req.user as JwtPayload
+
+         const result= await userServices.getUsersProfile(decodedToken.userId)
+           sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.CREATED,
+            message:"Successfully Get users profile",
+            data:result,
         })
 })
 
@@ -102,7 +120,8 @@ export const userControllers={
     createUser,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUsersProfile
 }
 
 

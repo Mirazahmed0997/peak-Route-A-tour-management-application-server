@@ -20,7 +20,7 @@ const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFun
     {
         if(err)
         {
-            return next(new AppError(401,err))
+            return next(new AppError(err.statusCode || 401,err.message))
         }
 
         if(!user)

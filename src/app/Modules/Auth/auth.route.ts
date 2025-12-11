@@ -4,6 +4,7 @@ import { verifyAuth } from "../../middlewares/CheckAuth";
 import { Role } from "../User/User.interface";
 import passport from "passport";
 import { profile } from "console";
+import { envVars } from "../../Config/env";
  
 
 const router =Router()
@@ -22,7 +23,7 @@ router.get("/google",async(req:Request,res: Response,next:NextFunction)=>{
     passport.authenticate("google",{scope:["profile","email"], state:redirect as string})(req,res,next)
 })
 
-router.get("/google/callback",passport.authenticate("google",{failureRedirect:"/login"}),authControllers.googleCallBackControllers)
+router.get("/google/callback",passport.authenticate("google",{failureRedirect:`${envVars.FRONTEND_URL}/login?error=There is Some issues with your account. Please contact with our support team`}),authControllers.googleCallBackControllers)
 
 
 
