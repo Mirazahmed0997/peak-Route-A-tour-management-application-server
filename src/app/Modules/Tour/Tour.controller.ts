@@ -14,7 +14,7 @@ const createTourType = catchAsynch(async (req: Request, res: Response, next: Nex
   const tourType = await TourTypeService.createTourType(req.body)
 
 
-  
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
@@ -27,7 +27,7 @@ const createTourType = catchAsynch(async (req: Request, res: Response, next: Nex
 
 
 const getAllTourTypes = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-  const query=req.query
+  const query = req.query
   console.log(query)
   const tourTypes = await TourTypeService.getAllTourTypes(query as Record<string, string>)
 
@@ -104,14 +104,14 @@ const createTour = catchAsynch(async (req: Request, res: Response, next: NextFun
 
 
 
-  req.body=JSON.parse(req.body.data);
+  req.body = JSON.parse(req.body.data);
 
 
-  const payload:ITour={
+  const payload: ITour = {
     ...req.body,
-    images: (req.files as Express.Multer.File[])?.map(file=> file.path)
+    images: (req.files as Express.Multer.File[])?.map(file => file.path)
   }
-       
+
   const tour = await TourService.createTour(payload)
 
 
@@ -132,7 +132,7 @@ const getAllTour = catchAsynch(async (req: Request, res: Response, next: NextFun
 
   sendResponse(res, {
     success: true,
-      statusCode: httpStatus.OK,
+    statusCode: httpStatus.OK,
     message: "Get all Tour successfully",
     data: tours,
   })
@@ -141,16 +141,16 @@ const getAllTour = catchAsynch(async (req: Request, res: Response, next: NextFun
 
 
 const getSingleTour = catchAsynch(async (req: Request, res: Response, next: NextFunction) => {
-  
+
   const id = req.params.id
-  console.log("id",id)
+  console.log("id", id)
   const tour = await TourService.getSingleTour(id as string)
 
 
-  
+
   sendResponse(res, {
     success: true,
-      statusCode: httpStatus.OK,
+    statusCode: httpStatus.OK,
     message: "Get Tour successfully",
     data: tour,
   })
@@ -160,19 +160,18 @@ const getSingleTour = catchAsynch(async (req: Request, res: Response, next: Next
 
 const updateTour = catchAsynch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params; // ✅ get division ID from URL
-   req.body=JSON.parse(req.body.data);
 
 
-  const payload:ITour={
-    ...req.body,
-    images: (req.files as Express.Multer.File[])?.map(file=> file.path)
-  }
+    req.body = JSON.parse(req.body.data);
 
-    // ✅ call service with both id and payload
+    const { id } = req.params;
+    const payload: ITour = {
+      ...req.body,
+      images: (req.files as Express.Multer.File[])?.map(file => file.path)
+    }
+
     const updatedTour = await TourService.updateTour(id as string, payload);
 
-    // ✅ send proper response
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK, // use 200 for update

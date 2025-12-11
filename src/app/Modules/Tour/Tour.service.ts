@@ -160,7 +160,7 @@ const getSingleTour = async (id: string) => {
 
 
 const updateTour = async (id: string, payload: Partial<ITour>) => {
-    // Check if the division exists
+    
     const isExist = await Tour.findById(id);
 
     if (!isExist) {
@@ -197,7 +197,7 @@ const updateTour = async (id: string, payload: Partial<ITour>) => {
 
 
 
-    // for delete selected images
+    // for delete selected images from cloudinary
 
     if(payload.deleteImages && payload.deleteImages.length && isExist.images && isExist.images.length)
     {

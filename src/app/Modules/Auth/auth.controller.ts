@@ -111,6 +111,52 @@ const logOut=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 })
 
 
+const changePassword=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
+{
+
+ 
+   
+    const newPassword= req.body.newPassword
+    const oldPassword= req.body.oldPassword
+    const decodedToken= req.user
+
+
+    // await authServices.resetPassword(oldPassword,newPassword,decodedToken)
+    await authServices.changePassword(oldPassword,newPassword,decodedToken as JwtPayload)
+      
+
+       
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.OK,
+            message:"Password changed successfully",
+            data:null,
+        })
+})
+
+
+const setPassword=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
+{
+
+ 
+    const decodedToken= req.user as JwtPayload
+    const {password}=req.body
+
+
+    await authServices.setPassword(decodedToken.userId, password)
+      
+
+       
+        sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.OK,
+            message:"Password changed successfully",
+            data:null,
+        })
+})
+
+
+
 const resetPassword=catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
 
@@ -153,13 +199,6 @@ const googleCallBackControllers=catchAsynch( async (req:Request,res:Response,nex
         }
         const tokenInfo = createUserTokrens(user)
         setAuthCookies(res,tokenInfo)
-       
-        // sendResponse(res,{
-        //     success:true,
-        //     statusCode:httpStatus.OK,
-        //     message:"Password changed successfully",
-        //     data:null,
-        // })
 
 
         res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
@@ -172,6 +211,8 @@ export  const  authControllers={
     credentialsLogin,
     getNewAccessToken,
     logOut,
+    changePassword,
+    googleCallBackControllers,
     resetPassword,
-    googleCallBackControllers
+    setPassword
 }

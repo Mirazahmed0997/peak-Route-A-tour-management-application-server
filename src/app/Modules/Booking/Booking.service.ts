@@ -10,11 +10,10 @@ import { Payment } from "../Payment/Payment.model";
 import { Tour } from "../Tour/Tour.model";
 import { sslService } from "../SSLCommerce/sslCommerce.service";
 import { ISSLCommerce } from "../SSLCommerce/Sslcommerce.interface";
+import { getTransactionId } from "../../Utils/getTransactionId";
 
 
-const getTransactionId = () => {
-  return `tran_${Date.now()}_${Math.floor(Math.random() * 1000)}`
-}
+
 
 
 
