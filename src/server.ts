@@ -6,6 +6,7 @@ import { promise } from 'zod';
 import { error } from 'console';
 import { envVars } from './app/Config/env';
 import { seedSuperAdmin } from './app/Utils/seedSuperAdmin';
+import { redisConnect } from './app/Config/redis.config';
 
 
 
@@ -31,7 +32,8 @@ const startServer= async()=>
 }
 
 (async()=>{
-   await startServer();
+   await redisConnect()
+   await startServer()
    await seedSuperAdmin()
 })()
 
