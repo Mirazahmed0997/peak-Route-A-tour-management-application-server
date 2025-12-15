@@ -50,6 +50,8 @@ export const sendEmail= async({
 
     })
 
+    console.log("info",info)
+
     console.log(`${to}: ${info.messageId}`)
    } catch (error : any) {
     console.log("email sending error", error.message)

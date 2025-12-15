@@ -13,9 +13,10 @@ export interface InvoiceData{
 }
 
 
-const generatePdf= async (invoiceData: InvoiceData)=>
+export const generatePdf= async (invoiceData: InvoiceData): Promise<Buffer>=>
 {
     try {
+
 
         return new Promise((resolve,reject)=>
         {
@@ -44,7 +45,7 @@ const generatePdf= async (invoiceData: InvoiceData)=>
 
 
             doc.text(`Thannk you for booking with us`,{align: "center"})
-            doc.end
+            doc.end()
 
 
 

@@ -10,6 +10,10 @@ import { success } from "zod";
 import { error } from "console";
 import { ISSLCommerce } from "../SSLCommerce/Sslcommerce.interface";
 import { sslService } from "../SSLCommerce/sslCommerce.service";
+import { generatePdf, InvoiceData } from "../../Utils/invoice";
+import { ITour } from "../Tour/Tour.interface";
+import { Iuser } from "../User/User.interface";
+import { sendEmail } from "../../Utils/sendEmail";
 
 
 
@@ -53,6 +57,72 @@ const initPayment = async (bookingId: string) => {
 
 }
 
+// const successPayment = async (query: Record<string, string>) => {
+//   const session = await Booking.startSession();
+//   session.startTransaction();
+
+//   try {
+//     // 1️⃣ Update payment
+//     const updatedPayment = await Payment.findOneAndUpdate(
+//       { transactionId: query.transactionId },
+//       { status: PAYMENT_STATUS.PAID },
+//       { new: true, session }
+//     );
+
+//     if (!updatedPayment) {
+//       throw new AppError(401, "Payment is not completed");
+//     }
+
+//     // 2️⃣ Update booking
+//     const updatedBooking = await Booking.findByIdAndUpdate(
+//       updatedPayment.booking,
+//       { status: BOOKING_STATUS.COMPLETE },
+//       { new: true, runValidators: true, session }
+//     )
+//       .populate({ path: "tour", select: "title" })
+//       .populate({ path: "user", select: "name email" });
+
+//     if (!updatedBooking) {
+//       throw new AppError(404, "Booking Not Found");
+//     }
+
+//     // 3️⃣ Prepare invoice
+//     const invoiceData: InvoiceData = {
+//       bookingDate: updatedBooking.createdAt,
+//       guestCount: updatedBooking.guestCount,
+//       transactionId: updatedPayment.transactionId,
+//       tourTitle: (updatedBooking.tour as ITour).title,
+//       totalAmount: updatedPayment.amount,
+//       userName: (updatedBooking.user as Iuser).name,
+//     };
+
+//     const pdfBuffer = await generatePdf(invoiceData);
+
+//     await sendEmail({
+//       to: (updatedBooking.user as Iuser).email,
+//       subject: "Booking Invoice",
+//       templateName: "invoice",
+//       templateData: invoiceData,
+//       attachments: [
+//         {
+//           filename: "invoice.pdf",
+//           content: pdfBuffer,
+//           contentType: "application/pdf",
+//         },
+//       ],
+//     });
+
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return { success: true, message: "Payment completed successfully" };
+
+//   } catch (error) {
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
+// };
 
 
 
@@ -66,14 +136,55 @@ const successPayment = async (query: Record<string, string>) => {
     // const booking= await Booking.findByIdAndUpdate()
     const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
       status: PAYMENT_STATUS.PAID,
-    }, { session })
+    }, { new:true,runValidators: true,session:session })
+
+      if(!updatedPayment)
+        {
+          throw new AppError(401,"Payment is not completed")
+        }
 
 
-    await Booking
+   const upadatedBooking= await Booking
       .findByIdAndUpdate(
         updatedPayment?.booking._id,
         { status: BOOKING_STATUS.COMPLETE },
         { new: true, runValidators: true, session })
+        .populate("tour","title")
+        .populate("user","name email")
+
+        if(!upadatedBooking)
+        {
+          throw new AppError(401,"Booking Not Found")
+        }
+
+
+        const invoiceData:InvoiceData={
+            bookingDate:upadatedBooking?.createdAt as Date,
+            guestCount:upadatedBooking?.guestCount,
+            transactionId:updatedPayment?.transactionId,
+            tourTitle:(upadatedBooking?.tour as unknown as ITour).title,
+            totalAmount:updatedPayment?.amount,
+            userName:(upadatedBooking.user as unknown as Iuser).name
+
+        }
+
+        const pdfBuffer= await generatePdf(invoiceData)
+
+
+        await sendEmail({
+          to:(upadatedBooking.user as unknown as Iuser).email,
+          subject:"Booking Invoice",
+          templateName:"invoice",
+          templateData:invoiceData,
+          attachments:[
+            {
+              filename:"invoice.pdf",
+              content:pdfBuffer,
+              contentType:"application/pdf"
+            }
+          ]
+
+        })
 
 
 
