@@ -11,13 +11,13 @@ import { envVars } from "../../Config/env"
 
 
 const initPayment = catchAsynch(async (req: Request, res: Response) => {
-    const bookingId= req.params.bookingId
+    const bookingId = req.params.bookingId
 
-    console.log("bookingId",bookingId)
+    console.log("bookingId", bookingId)
 
-    const result =await PaymentService.initPayment(bookingId as string)
+    const result = await PaymentService.initPayment(bookingId as string)
 
-     sendResponse(res, {
+    sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
         message: "Payment Create successfully",
@@ -37,6 +37,21 @@ const successPayment = catchAsynch(async (req: Request, res: Response) => {
 })
 
 
+const getInvoiceDownloadUrl = catchAsynch(async (req: Request, res: Response) => {
+
+    const { paymentId } = req.params
+    const result = await PaymentService.getInvoiceDownloadUrl(paymentId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "Invoice Download URL retrived succesfully",
+        data: result,
+    });
+}
+);
+
+
 
 const failPayment = catchAsynch(async (req: Request, res: Response) => {
 
@@ -44,7 +59,7 @@ const failPayment = catchAsynch(async (req: Request, res: Response) => {
 
     const result = await PaymentService.failPayment(query as Record<string, string>)
 
-    console.log("failed",result)
+    console.log("failed", result)
 
     if (!result.success) {
         res.redirect(`${envVars.SSL.SSL_FAIL_FRONTEND_URL}?transactionId=${query.transactionId}&message=${result.message}&amount=${query.amount}&status=${query.status}`)
@@ -73,5 +88,6 @@ export const PaymentController = {
     successPayment,
     failPayment,
     cancelPayment,
-    initPayment
+    initPayment,
+    getInvoiceDownloadUrl
 }
