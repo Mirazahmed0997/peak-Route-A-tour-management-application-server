@@ -3,6 +3,7 @@ import { catchAsynch } from "../../Utils/CatchAsync"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from "http-status-codes"
 import { otpService } from "./Otp.Service"
+import { string } from "zod"
 
 
 
@@ -23,7 +24,9 @@ const sentOtp = catchAsynch(async (req: Request, res: Response) => {
     })
 })
 const verifyOtp = catchAsynch(async (req: Request, res: Response) => {
-   
+
+    const {email,otp}=req.body
+        await otpService.veryfyOTP(email,otp)
        sendResponse(res, {
         success: true,
         statusCode: 200,
