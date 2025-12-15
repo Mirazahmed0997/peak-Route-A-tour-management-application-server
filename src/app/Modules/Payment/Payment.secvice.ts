@@ -14,6 +14,7 @@ import { generatePdf, InvoiceData } from "../../Utils/invoice";
 import { ITour } from "../Tour/Tour.interface";
 import { Iuser } from "../User/User.interface";
 import { sendEmail } from "../../Utils/sendEmail";
+import { uploadBufferToCloudinary } from "../../Config/cloudunary.config";
 
 
 
@@ -22,38 +23,37 @@ import { sendEmail } from "../../Utils/sendEmail";
 
 const initPayment = async (bookingId: string) => {
 
-  
 
-  const payment= await Payment.findOne({booking:bookingId})
 
-  if(!payment)
-  {
-    throw new  AppError(httpStatus.NOT_FOUND,"Payment not found, you havenot booked any service")
+  const payment = await Payment.findOne({ booking: bookingId })
+
+  if (!payment) {
+    throw new AppError(httpStatus.NOT_FOUND, "Payment not found, you havenot booked any service")
   }
 
-  const booking= await Booking.findById(payment.booking)
+  const booking = await Booking.findById(payment.booking)
 
 
-          const userAddress  = (booking?.user as any).address 
-          const userEmail  = (booking?.user as any).email 
-          const userPhoneNumber = (booking?.user as any).phone 
-          const userName = (booking?.user as any).name 
-  
-          const sslPayload : ISSLCommerce={
-            address: userAddress,
-            email:userEmail,
-            phoneNumber: userPhoneNumber,
-            name:userName,
-            amount: payment.amount,
-            transactionId:payment.transactionId
-          }
-  
-          const sslPayment=await sslService.sslPaymentInit(sslPayload)
+  const userAddress = (booking?.user as any).address
+  const userEmail = (booking?.user as any).email
+  const userPhoneNumber = (booking?.user as any).phone
+  const userName = (booking?.user as any).name
+
+  const sslPayload: ISSLCommerce = {
+    address: userAddress,
+    email: userEmail,
+    phoneNumber: userPhoneNumber,
+    name: userName,
+    amount: payment.amount,
+    transactionId: payment.transactionId
+  }
+
+  const sslPayment = await sslService.sslPaymentInit(sslPayload)
 
 
-          return{
-           paymentUrl:sslPayment.GatewayPageURL
-          }
+  return {
+    paymentUrl: sslPayment.GatewayPageURL
+  }
 
 }
 
@@ -136,55 +136,64 @@ const successPayment = async (query: Record<string, string>) => {
     // const booking= await Booking.findByIdAndUpdate()
     const updatedPayment = await Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
       status: PAYMENT_STATUS.PAID,
-    }, { new:true,runValidators: true,session:session })
+    }, { new: true, runValidators: true, session: session })
 
-      if(!updatedPayment)
-        {
-          throw new AppError(401,"Payment is not completed")
-        }
+    if (!updatedPayment) {
+      throw new AppError(401, "Payment is not completed")
+    }
 
 
-   const upadatedBooking= await Booking
+    const upadatedBooking = await Booking
       .findByIdAndUpdate(
         updatedPayment?.booking._id,
         { status: BOOKING_STATUS.COMPLETE },
         { new: true, runValidators: true, session })
-        .populate("tour","title")
-        .populate("user","name email")
+      .populate("tour", "title")
+      .populate("user", "name email")
 
-        if(!upadatedBooking)
+    if (!upadatedBooking) {
+      throw new AppError(401, "Booking Not Found")
+    }
+
+
+    const invoiceData: InvoiceData = {
+      bookingDate: upadatedBooking?.createdAt as Date,
+      guestCount: upadatedBooking?.guestCount,
+      transactionId: updatedPayment?.transactionId,
+      tourTitle: (upadatedBooking?.tour as unknown as ITour).title,
+      totalAmount: updatedPayment?.amount,
+      userName: (upadatedBooking.user as unknown as Iuser).name
+
+    }
+
+    const pdfBuffer = await generatePdf(invoiceData)
+
+    const cloudinaryResult :any= await uploadBufferToCloudinary(pdfBuffer, "invoice")
+
+    if(!cloudinaryResult)
+    {
+      throw new AppError(401,"Error uplpading pdf")
+    }
+
+    await Payment.findByIdAndUpdate(updatedPayment._id, { invoiceUrl: cloudinaryResult.secure_url },{runValidators:true,session})
+
+    console.log(cloudinaryResult)
+
+
+    await sendEmail({
+      to: (upadatedBooking.user as unknown as Iuser).email,
+      subject: "Booking Invoice",
+      templateName: "invoice",
+      templateData: invoiceData,
+      attachments: [
         {
-          throw new AppError(401,"Booking Not Found")
+          filename: "invoice.pdf",
+          content: pdfBuffer,
+          contentType: "application/pdf"
         }
+      ]
 
-
-        const invoiceData:InvoiceData={
-            bookingDate:upadatedBooking?.createdAt as Date,
-            guestCount:upadatedBooking?.guestCount,
-            transactionId:updatedPayment?.transactionId,
-            tourTitle:(upadatedBooking?.tour as unknown as ITour).title,
-            totalAmount:updatedPayment?.amount,
-            userName:(upadatedBooking.user as unknown as Iuser).name
-
-        }
-
-        const pdfBuffer= await generatePdf(invoiceData)
-
-
-        await sendEmail({
-          to:(upadatedBooking.user as unknown as Iuser).email,
-          subject:"Booking Invoice",
-          templateName:"invoice",
-          templateData:invoiceData,
-          attachments:[
-            {
-              filename:"invoice.pdf",
-              content:pdfBuffer,
-              contentType:"application/pdf"
-            }
-          ]
-
-        })
+    })
 
 
 
@@ -205,7 +214,7 @@ const successPayment = async (query: Record<string, string>) => {
 
 const failPayment = async (query: Record<string, string>) => {
 
-console.log("failPayment triggered with query:", query);
+  console.log("failPayment triggered with query:", query);
 
   const session = await Booking.startSession();
   session.startTransaction()
@@ -220,7 +229,7 @@ console.log("failPayment triggered with query:", query);
       .findByIdAndUpdate(
         updatedPayment?.booking._id,
         { status: BOOKING_STATUS.FAILED },
-        {new:true, runValidators: true, session })
+        { new: true, runValidators: true, session })
 
 
 
@@ -235,6 +244,19 @@ console.log("failPayment triggered with query:", query);
     session.endSession()
     throw error
   }
+}
+
+const getInvoiceDownloadUrl = async (paymentId: string) => {
+
+  const payment = await Payment.findById(paymentId)
+                  .select("invoiceUrl")
+                  .orFail(new Error("Payment not found"));
+
+  if(!payment.invoiceUrl){
+    throw new AppError(401,"Invoice not available yet")
+  }              
+
+  return payment.invoiceUrl
 }
 
 
@@ -255,7 +277,7 @@ const cancelPayment = async (query: Record<string, string>) => {
       .findByIdAndUpdate(
         updatedPayment?.booking._id,
         { status: BOOKING_STATUS.CANCEL },
-        {new:true, runValidators: true, session })
+        { new: true, runValidators: true, session })
 
 
 
@@ -283,5 +305,6 @@ export const PaymentService = {
   successPayment,
   failPayment,
   cancelPayment,
-  initPayment
+  initPayment,
+  getInvoiceDownloadUrl
 }
