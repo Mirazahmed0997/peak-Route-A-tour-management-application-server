@@ -9,7 +9,7 @@ import { StatsService } from "./StatsService"
 const getBookingStats = async (req: Request, res: Response, nest: NextFunction) => {
 
 
-    const bookingStats = await StatsService.getBookingStats
+    const bookingStats = await StatsService.getBookingStats()
 
     sendResponse(res, {
         statusCode: 200,
