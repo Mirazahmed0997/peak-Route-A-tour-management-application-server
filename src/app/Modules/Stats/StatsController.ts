@@ -21,13 +21,13 @@ const getBookingStats = async (req: Request, res: Response, nest: NextFunction) 
 const getPaymentStats = async (req: Request, res: Response, nest: NextFunction) => {
 
 
-    const paymentStats = await StatsService.getPaymentStats
+    const paymentStats = await StatsService.getPaymentStats()
 
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Get Payment stats Successfully",
-        data: getPaymentStats
+        data: paymentStats
     })
 }
 const getUserStat = async (req: Request, res: Response, nest: NextFunction) => {
