@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express"
 import { catchAsynch } from "../../Utils/CatchAsync"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from "http-status-codes"
-import { string } from "zod"
 import { BookingService } from "./Booking.service"
 import { JwtPayload } from "jsonwebtoken"
 

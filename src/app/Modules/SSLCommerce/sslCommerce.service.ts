@@ -73,7 +73,7 @@ const validatePayment = async (payload: any) => {
 
         await Payment.updateOne(
             { transactionId: payload.tran_id },
-            { paymentGetwayData: response.data },
+            { paymentGatewayData: response.data },
             {runValidators:true}
         )
 

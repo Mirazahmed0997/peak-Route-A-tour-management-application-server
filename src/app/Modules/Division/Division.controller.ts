@@ -3,7 +3,6 @@ import { catchAsynch } from "../../Utils/CatchAsync"
 import { DivisionService } from "./Division.service"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from "http-status-codes"
-import { string } from "zod"
 import { Idivision } from "./Division.interface"
 
 

@@ -2,8 +2,6 @@ import { Router } from "express";
 import { verifyAuth } from "../../middlewares/CheckAuth";
 import { Role } from "../User/User.interface";
 import { divisionControllers } from "./Division.controller";
-import { validateRequest } from "../../middlewares/validateRequest";
-import { createDivisionZodSchema, updateDivisionZodSchema } from "./Division.Validation";
 import { multerUpload } from "../../Config/multer.config";
 
 

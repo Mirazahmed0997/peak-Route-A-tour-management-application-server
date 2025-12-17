@@ -9,7 +9,7 @@ interface Tmeta{
 
 interface Tresponse<T>{
     statusCode:number;
-    success:Boolean;
+    success:boolean;
     message:string;
     data: T;
     meta?: Tmeta

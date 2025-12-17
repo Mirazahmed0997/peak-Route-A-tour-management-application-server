@@ -1,9 +1,7 @@
 import { Request, Response } from "express"
 import { catchAsynch } from "../../Utils/CatchAsync"
 import { sendResponse } from "../../Utils/sendResponse"
-import httpStatus from "http-status-codes"
 import { otpService } from "./Otp.Service"
-import { string } from "zod"
 
 
 

@@ -4,7 +4,6 @@ import { TourService, TourTypeService } from "./Tour.service"
 import { sendResponse } from "../../Utils/sendResponse"
 import httpStatus from 'http-status-codes';
 import { ITour } from "./Tour.interface";
-import AppError from "../../errorHelper/AppError";
 
 
 

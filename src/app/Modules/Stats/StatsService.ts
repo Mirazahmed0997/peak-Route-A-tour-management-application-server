@@ -1,8 +1,8 @@
 import { Booking } from "../Booking/Booking.model"
 import { PAYMENT_STATUS } from "../Payment/Payment.interface"
 import { Payment } from "../Payment/Payment.model"
-import { Tour, TourType } from "../Tour/Tour.model"
-import { isActive, Iuser } from "../User/User.interface"
+import { Tour } from "../Tour/Tour.model"
+import { isActive } from "../User/User.interface"
 import { User } from "../User/User.model"
 
 

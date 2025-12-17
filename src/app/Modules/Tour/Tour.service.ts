@@ -1,6 +1,4 @@
-import { Query } from "mongoose";
 import AppError from "../../errorHelper/AppError"
-import { excludFields } from "../../globalConstants";
 import { searchFields, TourTypeSearchFields } from "./Tour.constant";
 import { ITour, ITourType } from "./Tour.interface"
 import { Tour, TourType } from "./Tour.model"

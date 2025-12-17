@@ -4,10 +4,8 @@ import httpStatus from 'http-status-codes';
 import { User } from "../User/User.model";
 import bcryptjs from "bcryptjs"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { generateToken, verifyToken } from "../../Utils/jwt";
 import { envVars } from "../../Config/env";
 import { createNewAccessTokenWithrefreshToken, createUserTokrens } from "../../Utils/UserToken";
-import { email, string } from 'zod';
 import { sendEmail } from "../../Utils/sendEmail";
 
 

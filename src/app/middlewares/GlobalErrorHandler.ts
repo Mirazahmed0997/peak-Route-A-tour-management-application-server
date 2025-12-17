@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { envVars } from "../Config/env"
 import AppError from "../errorHelper/AppError"
-import mongoose from "mongoose"
 import { handleDuplicateError } from "../Helpers/HandleDuplicateError"
 import { handleCastError } from "../Helpers/HandleCastError"
 import { handleZodError } from "../Helpers/HandleZodError"
@@ -59,7 +58,7 @@ export const globalError=async(err:any,req:Request,res:Response,next:NextFunctio
     else if(err.name==="ZodError"){
         const simplefiedError= handleZodError(err)
         statusCode=simplefiedError.statusCode;
-        message:simplefiedError.message
+        simplefiedError.message
         errorSources= simplefiedError.errorSources
     }
 

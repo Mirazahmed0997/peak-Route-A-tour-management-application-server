@@ -1,7 +1,5 @@
 import { model, Schema } from "mongoose";
 import { ITour, ITourType } from "./Tour.interface";
-import { required } from 'zod/mini';
-import { timeStamp } from "console";
 
 
 

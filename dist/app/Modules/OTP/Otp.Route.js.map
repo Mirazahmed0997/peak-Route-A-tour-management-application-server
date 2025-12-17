@@ -1,0 +1,1 @@
+{"version":3,"file":"Otp.Route.js","sourceRoot":"","sources":["../../../../src/app/Modules/OTP/Otp.Route.ts"],"names":[],"mappings":";;;;;;AAAA,sDAA6B;AAC7B,qDAAiD;AAGjD,MAAM,MAAM,GAAE,iBAAO,CAAC,MAAM,EAAE,CAAA;AAE9B,MAAM,CAAC,IAAI,CAAC,OAAO,EAAC,8BAAa,CAAC,OAAO,CAAC,CAAA;AAC1C,MAAM,CAAC,IAAI,CAAC,SAAS,EAAC,8BAAa,CAAC,SAAS,CAAC,CAAA;AAEjC,QAAA,SAAS,GAAE,MAAM,CAAC"}

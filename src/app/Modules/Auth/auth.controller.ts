@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsynch } from "../../Utils/CatchAsync"
 import { sendResponse } from "../../Utils/sendResponse"
 import  httpStatus  from 'http-status-codes';
-import { User } from "../User/User.model";
 import AppError from "../../errorHelper/AppError";
 import { authServices } from "./auth.service";
 import { setAuthCookies } from "../../Utils/setCookie";

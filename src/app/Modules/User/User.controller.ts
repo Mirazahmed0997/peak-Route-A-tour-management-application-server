@@ -104,13 +104,13 @@ const getSingleUser=catchAsynch(async (req:Request,res:Response,next:NextFunctio
 
 export const deleteUser = catchAsynch(
     async (req: Request, res: Response, next: NextFunction) => {
-      const { id } = req.params; // ✅ get user ID from URL
-      const verifyToken = req.user; // ✅ assuming JWT middleware sets req.user
+      const { id } = req.params; 
+      const verifyToken = req.user; 
   
-      // ✅ call service with parameters
+      // call service with parameters
       const result = await userServices.deleteUser(id as string, verifyToken as JwtPayload);
   
-      // ✅ send success response
+      // send success response
       sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK, // use 200 for successful delete

@@ -1,0 +1,27 @@
+import { Types } from "mongoose";
+export interface ITourType {
+    name: string;
+}
+export interface ITour {
+    title: string;
+    slug?: string;
+    decription?: string;
+    images?: string[];
+    location?: string;
+    description?: string;
+    depurtureLocation?: string;
+    arivalLocationl?: string;
+    costFrom?: number;
+    startDate?: Date;
+    endDate?: Date;
+    included?: string[];
+    exCluded?: string[];
+    amenities?: string[];
+    tourPlan?: string[];
+    maxGuest?: number;
+    minAge?: number;
+    division: Types.ObjectId;
+    tourType: Types.ObjectId;
+    deleteImages?: string[];
+}
+//# sourceMappingURL=Tour.interface.d.ts.map
