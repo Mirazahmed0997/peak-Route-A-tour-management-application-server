@@ -98,7 +98,6 @@ const successPayment = async (query) => {
     const session = await Booking_model_1.Booking.startSession();
     session.startTransaction();
     try {
-        // const booking= await Booking.findByIdAndUpdate()
         const updatedPayment = await Payment_model_1.Payment.findOneAndUpdate({ transactionId: query.transactionId }, {
             status: Payment_interface_1.PAYMENT_STATUS.PAID,
         }, { new: true, runValidators: true, session: session });
