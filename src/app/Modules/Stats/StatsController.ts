@@ -45,13 +45,13 @@ const getUserStat = async (req: Request, res: Response, nest: NextFunction) => {
 const getTourStat = async (req: Request, res: Response, nest: NextFunction) => {
 
 
-    const tourStat = await StatsService.getTourStat
+    const tourStat = await StatsService.getTourStat()
 
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Get Tours stats Successfully",
-        data: getTourStat
+        data: tourStat
     })
 }
 // const getBookingStats = async (req: Request, res: Response, nest: NextFunction) => {
