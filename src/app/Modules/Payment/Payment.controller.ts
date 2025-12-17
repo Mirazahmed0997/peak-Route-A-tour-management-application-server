@@ -5,6 +5,7 @@ import httpStatus from "http-status-codes"
 import { string } from "zod"
 import { PaymentService } from "./Payment.secvice"
 import { envVars } from "../../Config/env"
+import { sslService } from "../SSLCommerce/sslCommerce.service"
 
 
 
@@ -50,6 +51,20 @@ const getInvoiceDownloadUrl = catchAsynch(async (req: Request, res: Response) =>
     });
 }
 );
+const validatePayment = catchAsynch(async (req: Request, res: Response) => {
+
+    const result = await sslService.validatePayment(req.body)
+
+    console.log("ssl body",req.body)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "Payment validated succesfully",
+        data: result,
+    });
+}
+);
 
 
 
@@ -89,5 +104,6 @@ export const PaymentController = {
     failPayment,
     cancelPayment,
     initPayment,
-    getInvoiceDownloadUrl
+    getInvoiceDownloadUrl,
+    validatePayment
 }
