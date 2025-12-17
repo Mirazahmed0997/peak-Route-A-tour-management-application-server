@@ -27,6 +27,7 @@ router.post('/register',
 // router.get('/AllUsers',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),userControllers.getAllUsers)
 router.get('/AllUsers',userControllers.getAllUsers)
 router.get('/userProfile',verifyAuth(...Object.values(Role)),userControllers.getUsersProfile)
+router.get('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),userControllers.getSingleUser)
 router.patch('/:id', verifyAuth(...Object.values(Role)),multerUpload.single("file"),userControllers.updateUser)
 router.delete('/:id',verifyAuth(Role.ADMIN,Role.SUPER_ADMIN),userControllers.deleteUser)
 

@@ -45,7 +45,14 @@ const createUser= async (payload:Partial<Iuser>)=>
 const updateUser=async(userId:string,payload:Partial<Iuser>,decotedToken:JwtPayload)=>
 {
 
-    console.log("user payload",payload)
+    if(decotedToken.role=== Role.USER || decotedToken.role===Role.GUIDE)
+    {
+      if(!userId==decotedToken.userId)
+      {
+        throw new AppError(401,"You are not authorised")
+      }
+    }
+
     const isUserExist=await User.findById(userId)
 
     if(!isUserExist){
@@ -53,6 +60,14 @@ const updateUser=async(userId:string,payload:Partial<Iuser>,decotedToken:JwtPayl
             throw new AppError(httpStatus.NOT_FOUND,"User not found")
         }
     }
+
+
+    if(decotedToken.role=== Role.ADMIN && isUserExist.role===Role.SUPER_ADMIN)
+    {
+      throw new AppError(401,"You are not authorised")
+    }
+
+
 
     if(isUserExist.isDeleted || isUserExist.isActive===isActive.BLOCKED){
         throw new AppError(httpStatus.NOT_FOUND,"User unable to be updated")
@@ -67,10 +82,10 @@ const updateUser=async(userId:string,payload:Partial<Iuser>,decotedToken:JwtPayl
         }
     }
 
-    if(payload.role===Role.SUPER_ADMIN && decotedToken.role === Role.ADMIN)
-    {
-         throw new AppError(httpStatus.FORBIDDEN,"Unauthorized access")
-    }
+    // if(payload.role===Role.SUPER_ADMIN && decotedToken.role === Role.ADMIN)
+    // {
+    //      throw new AppError(httpStatus.FORBIDDEN,"Unauthorized access")
+    // }
 
     if(payload.isActive || payload.isDeleted|| payload.isVerified)
     {
@@ -80,10 +95,7 @@ const updateUser=async(userId:string,payload:Partial<Iuser>,decotedToken:JwtPayl
         }
     }
 
-    if(payload.password)
-    {
-        payload.password=await bcryptjs.hash(payload.password,envVars.BCRYPT_SALT_ROUND) 
-    }
+ 
 
     const newUpdatedUser= await User.findByIdAndUpdate(userId,payload, {new:true, runValidators:true})
 
@@ -115,6 +127,15 @@ const getAllUsers=async (query: Record<string, string>)=>
 
 
 const getUsersProfile=async (userId:string)=>
+{
+     const user = await User.findById(userId).select("-password")
+     return {
+       data: user,
+     }
+}
+
+
+const getSingleUser=async (userId:string)=>
 {
      const user = await User.findById(userId).select("-password")
      return {
@@ -162,5 +183,6 @@ export const userServices={
     getAllUsers,
     updateUser,
     deleteUser,
+    getSingleUser,
     getUsersProfile
 }
