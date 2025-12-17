@@ -87,6 +87,18 @@ const getUsersProfile=catchAsynch(async (req:Request,res:Response,next:NextFunct
             data:result,
         })
 })
+const getSingleUser=catchAsynch(async (req:Request,res:Response,next:NextFunction)=>{
+
+         const id=req.params.id
+
+         const result= await userServices.getUsersProfile(id as string)
+           sendResponse(res,{
+            success:true,
+            statusCode:httpStatus.CREATED,
+            message:"Successfully Get single profile",
+            data:result,
+        })
+})
 
 
 
@@ -121,31 +133,8 @@ export const userControllers={
     getAllUsers,
     updateUser,
     deleteUser,
+    getSingleUser,
     getUsersProfile
 }
 
 
-
-// const createUserFunction=async (req:Request,res:Response)=>
-// {
-//      const user = await userServices.createUser(req.body)
-      
-
-//         res.status(httpStatus.CREATED).json({
-//             message: "User successfully created"
-//         })
-// }
-
-
-
-// const createUser= async(req:Request,res:Response,next:NextFunction)=>
-// {
-//     try {
-        
-
-        
-//     } catch (error) {
-//         console.log(error)
-//         next(error)
-//     }
-// }
