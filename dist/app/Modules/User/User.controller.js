@@ -9,11 +9,12 @@ const CatchAsync_1 = require("../../Utils/CatchAsync");
 const User_service_1 = require("./User.service");
 const sendResponse_1 = require("../../Utils/sendResponse");
 const createUser = (0, CatchAsync_1.catchAsynch)(async (req, res, next) => {
-    req.body = JSON.parse(req.body.data);
-    const payload = {
-        ...req.body,
-        picture: req.file?.path
-    };
+    // req.body = JSON.parse(req.body.data)
+    // const payload: Iuser = {
+    //   ...req.body,
+    //   picture: req.file?.path
+    // }
+    const payload = req.body;
     const user = await User_service_1.userServices.createUser(payload);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
