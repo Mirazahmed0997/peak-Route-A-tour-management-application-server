@@ -16,11 +16,12 @@ import { Iuser } from "./User.interface";
  const createUser= catchAsynch( async (req:Request,res:Response,next:NextFunction)=>
 {
 
-      req.body = JSON.parse(req.body.data)
-      const payload: Iuser = {
-        ...req.body,
-        picture: req.file?.path
-      }
+      // req.body = JSON.parse(req.body.data)
+      // const payload: Iuser = {
+      //   ...req.body,
+      //   picture: req.file?.path
+      // }
+    const payload= req.body
     const user = await userServices.createUser(payload)
       
 
