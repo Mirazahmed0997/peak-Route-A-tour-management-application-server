@@ -12,7 +12,7 @@ const generateOTP = async (length = 6) => {
 
 }
 
-const sendOTP = async (email: string, name: string) => {
+const sendOTP = async (email: string) => {
 
 
     const user = await User.findOne({ email })
@@ -39,7 +39,6 @@ const sendOTP = async (email: string, name: string) => {
         subject: "Your OTP Code",
         templateName: "otpTmeplate",
         templateData: {
-            name: name,
             otp: otp
         }
     })

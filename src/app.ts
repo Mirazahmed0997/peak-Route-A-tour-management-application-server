@@ -26,12 +26,23 @@ app.use(cors({
 
 
 app.use(expressSession({
-    secret:envVars.EXPRESS_SESSION_SECRET,
-    resave:false,
-    saveUninitialized: false
-}))
+    secret: envVars.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      sameSite: "lax",
+      secure: false,
+    }
+  }))
+  
+
+// app.use(expressSession({
+//     secret:envVars.EXPRESS_SESSION_SECRET,
+//     resave:false,
+//     saveUninitialized: false
+// }))
 app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.session())
 
 
 

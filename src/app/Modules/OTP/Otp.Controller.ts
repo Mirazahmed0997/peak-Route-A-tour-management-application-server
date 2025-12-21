@@ -10,9 +10,11 @@ import { otpService } from "./Otp.Service"
 
 const sentOtp = catchAsynch(async (req: Request, res: Response) => {
 
-    const {email,name}=req.body
+    console.log(req.body)
 
-        await otpService.sendOTP(email,name)
+    const {email}=req.body
+
+        await otpService.sendOTP(email)
    
        sendResponse(res, {
         success: true,

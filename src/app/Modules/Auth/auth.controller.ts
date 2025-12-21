@@ -33,14 +33,18 @@ const credentialsLogin=catchAsynch( async (req:Request,res:Response,next:NextFun
         const {password:pass,...rest}=user.toObject()
 
 
-         setAuthCookies(res,userTokens)
+        //  setAuthCookies(res,userTokens)
+         setAuthCookies(res, {
+            accessToken: userTokens.accessToken,
+            refreshToken: userTokens.refreshToken,
+          });
           
        sendResponse(res,{
             success:true,
             statusCode:httpStatus.OK,
             message:"User Login successfully",
             data:{
-                accessToken: userTokens.accesToken,
+                accessToken: userTokens.accessToken,
                 refreshToken:userTokens.refreshToken,
                 user:rest
             },

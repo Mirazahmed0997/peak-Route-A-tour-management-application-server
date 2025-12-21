@@ -17,11 +17,11 @@ export const createUserTokrens=(user:Partial<Iuser>)=>
            }
     
     
-        const accesToken=generateToken(jwtPayload,envVars.jwt_access_secret,envVars.jwt_access_expire)
+        const accessToken=generateToken(jwtPayload,envVars.jwt_access_secret,envVars.jwt_access_expire)
         const refreshToken= generateToken(jwtPayload,envVars.JWT_REFRESH_SECRET,envVars.JWT_EXPIRE_SECRET)
 
         return{
-            accesToken,
+            accessToken,
             refreshToken
         }
 }

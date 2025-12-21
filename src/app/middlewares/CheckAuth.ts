@@ -11,7 +11,7 @@ import  httpStatus  from 'http-status-codes';
 export const verifyAuth=(...authRoles:string[])=> async (req:Request,res:Response,next:NextFunction)=>{
 
    try {
-     const accesToken= req.headers.authorization
+     const accesToken= req.headers.authorization || req.cookies.accessToken
 
      if(!accesToken)
      {
