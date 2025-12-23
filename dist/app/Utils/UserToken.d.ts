@@ -1,6 +1,6 @@
 import { Iuser } from "../Modules/User/User.interface";
 export declare const createUserTokrens: (user: Partial<Iuser>) => {
-    accesToken: string;
+    accessToken: string;
     refreshToken: string;
 };
 export declare const createNewAccessTokenWithrefreshToken: (refreshToken: string) => Promise<{

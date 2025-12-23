@@ -3,20 +3,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.setAuthCookies = void 0;
 const env_1 = require("../Config/env");
 const setAuthCookies = (res, tokenInfo) => {
+    const isProd = env_1.envVars.NODE_ENV === "production";
     if (tokenInfo.accessToken) {
         res.cookie("accessToken", tokenInfo.accessToken, {
             httpOnly: true,
-            secure: env_1.envVars.NODE_ENV == "production",
-            sameSite: "none"
+            secure: isProd,
+            sameSite: isProd ? "none" : "lax",
+            maxAge: 15 * 60 * 1000,
         });
     }
     if (tokenInfo.refreshToken) {
         res.cookie("refreshToken", tokenInfo.refreshToken, {
             httpOnly: true,
-            secure: env_1.envVars.NODE_ENV == "production",
-            sameSite: "none"
+            secure: isProd,
+            sameSite: isProd ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
     }
 };
 exports.setAuthCookies = setAuthCookies;
+// import { Response } from "express";
+// import { envVars } from "../Config/env";
+// export interface AuthTokens {
+//     accessToken?: string;
+//     refreshToken?: string
+// }
+// export const setAuthCookies = (res: Response, tokenInfo: AuthTokens) => {
+//     console.log("tokenInfo",tokenInfo)
+//     if (tokenInfo.accessToken) {
+//         res.cookie("accessToken", tokenInfo.accessToken, {
+//             httpOnly: true,
+//             secure: envVars.NODE_ENV == "production",
+//             sameSite: "none"
+//         })
+//     }
+//     if (tokenInfo.refreshToken) {
+//         res.cookie("refreshToken", tokenInfo.refreshToken, {
+//             httpOnly: true,
+//             secure: envVars.NODE_ENV == "production",
+//             sameSite: "none"
+//         })
+//     }
+// }
 //# sourceMappingURL=setCookie.js.map

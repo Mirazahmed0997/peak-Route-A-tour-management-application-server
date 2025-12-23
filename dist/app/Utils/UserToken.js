@@ -16,10 +16,10 @@ const createUserTokrens = (user) => {
         email: user.email,
         role: user.role
     };
-    const accesToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.jwt_access_secret, env_1.envVars.jwt_access_expire);
+    const accessToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.jwt_access_secret, env_1.envVars.jwt_access_expire);
     const refreshToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.JWT_REFRESH_SECRET, env_1.envVars.JWT_EXPIRE_SECRET);
     return {
-        accesToken,
+        accessToken,
         refreshToken
     };
 };

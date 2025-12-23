@@ -25,13 +25,17 @@ const credentialsLogin = (0, CatchAsync_1.catchAsynch)(async (req, res, next) =>
         const userTokens = (0, UserToken_1.createUserTokrens)(user);
         // delete user.toObject().password
         const { password: pass, ...rest } = user.toObject();
-        (0, setCookie_1.setAuthCookies)(res, userTokens);
+        //  setAuthCookies(res,userTokens)
+        (0, setCookie_1.setAuthCookies)(res, {
+            accessToken: userTokens.accessToken,
+            refreshToken: userTokens.refreshToken,
+        });
         (0, sendResponse_1.sendResponse)(res, {
             success: true,
             statusCode: http_status_codes_1.default.OK,
             message: "User Login successfully",
             data: {
-                accessToken: userTokens.accesToken,
+                accessToken: userTokens.accessToken,
                 refreshToken: userTokens.refreshToken,
                 user: rest
             },
