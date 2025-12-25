@@ -45,54 +45,54 @@ const createBooking = async (payload: Partial<Ibooking>, userId: string) => {
 
     const amount = Number(tour.costFrom) * Number(payload.guestCount!)
 
-    const booking =await Booking.create([{
+    const booking = await Booking.create([{
       user: userId,
       status: BOOKING_STATUS.PENDING,
       ...payload,
-    }],{session})
+    }], { session })
 
 
     const payment = await Payment.create([{
-      booking:  booking[0]?._id,
+      booking: booking[0]?._id,
       status: PAYMENT_STATUS.UNPAID,
       transactionId: tranSactionId,
       amount: amount
-    }],{session})
+    }], { session })
 
 
 
     const updatedBooking = await Booking
       .findByIdAndUpdate(
         booking[0]?._id,
-        { payment: payment[0]?._id},
-        { new: true, runValidators: true,session })
-        .populate("user", "name email phone address")
-        .populate("tour", "title costFrom")
-        .populate("payment")
+        { payment: payment[0]?._id },
+        { new: true, runValidators: true, session })
+      .populate("user", "name email phone address")
+      .populate("tour", "title costFrom")
+      .populate("payment")
 
 
-        const userAddress  = (updatedBooking?.user as any).address 
-        const userEmail  = (updatedBooking?.user as any).email 
-        const userPhoneNumber = (updatedBooking?.user as any).phone 
-        const userName = (updatedBooking?.user as any).name 
+    const userAddress = (updatedBooking?.user as any).address
+    const userEmail = (updatedBooking?.user as any).email
+    const userPhoneNumber = (updatedBooking?.user as any).phone
+    const userName = (updatedBooking?.user as any).name
 
-        const sslPayload : ISSLCommerce={
-          address: userAddress,
-          email:userEmail,
-          phoneNumber: userPhoneNumber,
-          name:userName,
-          amount: amount,
-          transactionId:tranSactionId
-        }
+    const sslPayload: ISSLCommerce = {
+      address: userAddress,
+      email: userEmail,
+      phoneNumber: userPhoneNumber,
+      name: userName,
+      amount: amount,
+      transactionId: tranSactionId
+    }
 
-        const sslPayment=await sslService.sslPaymentInit(sslPayload)
+    const sslPayment = await sslService.sslPaymentInit(sslPayload)
 
-        await session.commitTransaction()
-        session.endSession()
+    await session.commitTransaction()
+    session.endSession()
 
     return {
       booking: updatedBooking,
-      paymentUrl:sslPayment.GatewayPageURL
+      paymentUrl: sslPayment.GatewayPageURL
     }
 
   } catch (error) {
@@ -149,7 +149,12 @@ const getSingleBookings = async (id: string) => {
 
 const getUserBooking = async (userId: string) => {
 
-  const booking = await Booking.find({user:userId});
+  console.log(userId)
+
+  const booking = await Booking.find({ user: userId })
+    .populate("user", "name email phone address")
+    .populate("tour", "title costFrom")
+    .populate("payment");
   return {
     data: booking,
   }
@@ -165,7 +170,7 @@ const updateBooking = async (id: string, payload: Partial<Ibooking>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Booking not found");
   }
 
-  
+
 
   const updatedBookings = await Booking.findByIdAndUpdate(id, payload, {
     new: true,

@@ -182,11 +182,11 @@ const updateTour = catchAsynch(
 
 const deleteTour = catchAsynch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params; // ✅ get division ID from URL
+    const { id } = req.params; //  get division ID from URL
 
     const deletedTour = await TourService.deleteTour(id as string);
 
-    // ✅ send proper response
+    //  send proper response
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK, // use 200 for update
