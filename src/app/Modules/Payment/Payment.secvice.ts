@@ -157,7 +157,8 @@ const successPayment = async (query: Record<string, string>) => {
       transactionId: updatedPayment?.transactionId,
       tourTitle: (upadatedBooking?.tour as unknown as ITour).title,
       totalAmount: updatedPayment?.amount,
-      userName: (upadatedBooking.user as unknown as Iuser).name
+      userName: (upadatedBooking.user as unknown as Iuser).name,
+   
 
     }
 
