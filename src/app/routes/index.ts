@@ -31,7 +31,7 @@ const moduleRoutes=[
         route: TourTypeRoute
     },
     {
-        path:'/Tour',
+        path:'/Tour', 
         route: TourRoute
     },
     {

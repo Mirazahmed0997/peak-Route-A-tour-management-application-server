@@ -9,7 +9,7 @@ const setAuthCookies = (res, tokenInfo) => {
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
-            maxAge: 15 * 60 * 1000,
+            maxAge: 1 * 24 * 60 * 60 * 1000,
         });
     }
     if (tokenInfo.refreshToken) {

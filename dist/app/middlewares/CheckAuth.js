@@ -13,6 +13,8 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const verifyAuth = (...authRoles) => async (req, res, next) => {
     try {
         const accesToken = req.headers.authorization || req.cookies.accessToken;
+        console.log("Token from cookie:", req.cookies.accessToken);
+        console.log("Token from header:", req.headers.authorization);
         if (!accesToken) {
             throw new AppError_1.default(403, "No token recieved");
         }

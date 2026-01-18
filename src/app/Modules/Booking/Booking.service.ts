@@ -33,9 +33,9 @@ const createBooking = async (payload: Partial<Ibooking>, userId: string) => {
     const user = await User.findById(id)
 
 
-    if (!user?.phone || !user?.address) {
-      throw new AppError(httpStatus.BAD_REQUEST, "Please Update your Profile to book tour")
-    }
+    // if (!user?.phone || !user?.address) {
+    //   throw new AppError(httpStatus.BAD_REQUEST, "Please Update your Profile to book tour")
+    // }
 
     const tour = await Tour.findById(payload.tour).select("costFrom")
 

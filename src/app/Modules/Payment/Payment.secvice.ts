@@ -173,7 +173,7 @@ const successPayment = async (query: Record<string, string>) => {
 
     await Payment.findByIdAndUpdate(updatedPayment._id, { invoiceUrl: cloudinaryResult.secure_url },{runValidators:true,session})
 
-    console.log(cloudinaryResult)
+    // console.log(cloudinaryResult)
 
 
     await sendEmail({

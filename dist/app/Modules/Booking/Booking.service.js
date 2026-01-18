@@ -98,7 +98,11 @@ const getSingleBookings = async (id) => {
     };
 };
 const getUserBooking = async (userId) => {
-    const booking = await Booking_model_1.Booking.find({ user: userId });
+    console.log(userId);
+    const booking = await Booking_model_1.Booking.find({ user: userId })
+        .populate("user", "name email phone address")
+        .populate("tour", "title costFrom")
+        .populate("payment");
     return {
         data: booking,
     };

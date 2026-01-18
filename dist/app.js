@@ -18,8 +18,12 @@ app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.set("trust proxy", 1);
 app.use(express_1.default.urlencoded({ extended: true }));
+// app.use(cors({
+//     origin:envVars.FRONTEND_URL,
+//     credentials:true
+// }))
 app.use((0, cors_1.default)({
-    origin: env_1.envVars.FRONTEND_URL,
+    origin: true,
     credentials: true
 }));
 app.use((0, express_session_1.default)({

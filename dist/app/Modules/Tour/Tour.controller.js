@@ -118,9 +118,9 @@ const updateTour = (0, CatchAsync_1.catchAsynch)(async (req, res, next) => {
     });
 });
 const deleteTour = (0, CatchAsync_1.catchAsynch)(async (req, res, next) => {
-    const { id } = req.params; // ✅ get division ID from URL
+    const { id } = req.params; //  get division ID from URL
     const deletedTour = await Tour_service_1.TourService.deleteTour(id);
-    // ✅ send proper response
+    //  send proper response
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         statusCode: http_status_codes_1.default.OK, // use 200 for update

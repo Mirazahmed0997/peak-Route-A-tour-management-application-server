@@ -117,7 +117,7 @@ const successPayment = async (query) => {
             transactionId: updatedPayment?.transactionId,
             tourTitle: (upadatedBooking?.tour).title,
             totalAmount: updatedPayment?.amount,
-            userName: upadatedBooking.user.name
+            userName: upadatedBooking.user.name,
         };
         const pdfBuffer = await (0, invoice_1.generatePdf)(invoiceData);
         const cloudinaryResult = await (0, cloudunary_config_1.uploadBufferToCloudinary)(pdfBuffer, "invoice");
@@ -125,7 +125,7 @@ const successPayment = async (query) => {
             throw new AppError_1.default(401, "Error uplpading pdf");
         }
         await Payment_model_1.Payment.findByIdAndUpdate(updatedPayment._id, { invoiceUrl: cloudinaryResult.secure_url }, { runValidators: true, session });
-        console.log(cloudinaryResult);
+        // console.log(cloudinaryResult)
         await (0, sendEmail_1.sendEmail)({
             to: upadatedBooking.user.email,
             subject: "Booking Invoice",
