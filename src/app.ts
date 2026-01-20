@@ -19,15 +19,22 @@ app.use(cookieParser())
 app.use(express.json())
 app.set("trust proxy",1)
 app.use(express.urlencoded({extended:true}))
-// app.use(cors({
-//     origin:envVars.FRONTEND_URL,
-//     credentials:true
-// }))
 
-app.use(cors({
-  origin: true,        
-  credentials: true    
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://peak-route-a-tour-management-applic.vercel.app"
+    ],
+    credentials: true
+  })
+)
+
+
+// app.use(cors({
+//   origin: true,        
+//   credentials: true    
+// }));
 
 
 app.use(expressSession({

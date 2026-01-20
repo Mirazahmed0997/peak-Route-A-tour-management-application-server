@@ -23,9 +23,9 @@ const createBooking = async (payload, userId) => {
     session.startTransaction();
     try {
         const user = await User_model_1.User.findById(id);
-        if (!user?.phone || !user?.address) {
-            throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Please Update your Profile to book tour");
-        }
+        // if (!user?.phone || !user?.address) {
+        //   throw new AppError(httpStatus.BAD_REQUEST, "Please Update your Profile to book tour")
+        // }
         const tour = await Tour_model_1.Tour.findById(payload.tour).select("costFrom");
         if (!tour?.costFrom) {
             throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, " NO tour cost not found");
